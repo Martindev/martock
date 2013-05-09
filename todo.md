@@ -14,15 +14,15 @@ worlds which appear contiguous.
 2. The map storing and loading algorithm must be highly configurable, taking
    arguments for the size of a block (for example, if we decide to make a struct
    for it in the future and add/remove fields), and dimensions of the chunk. A
-   prototype may look like
+   potential prototype is below.
 
-    struct Chunk {
-            int width;
-            int height;
-            int depth;
-            size_t block_size;
-    };
-
+        struct Chunk {
+                int width;
+                int height;
+                int depth;
+                size_t block_size;
+        };
+    
    So the size of a chunk file can be determined by width * height * depth *
    block_size.
 
