@@ -1,4 +1,4 @@
-Martock: Development Schedule
+Martock
 ================================================================================
 
 Martock is clone of Terraria, a project we are using to learn C, databases,
