@@ -21,15 +21,20 @@ worlds which appear contiguous.
                 int height;
                 int depth;
                 size_t block_size;
+                Block *grid[width][height][depth];
         };
     
-   So the size of a chunk file can be determined by width * height * depth *
+   So the size of a chunk file can be determined by width x height x depth x
    block_size.
 
 3. The functions for generating chunks, or chunk regions, must take other chunks
    as arguments to ensure the generated chunk matches the chunks next to it.
 
-4. There must be a module for rendering maps to images for analyzing them from
+4. Tile graphics will be required, at least basic ones, including but not
+   limited to sky, cloud, grass, dirt, grass edges on dirt, stone, and a few
+   kinds of ore.
+
+5. There must be a module for rendering maps to images for analyzing them from
    aesthetic point of view. This should probably be done earlier rather than
    later as it will make testing far easier.
 
