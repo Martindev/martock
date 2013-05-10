@@ -120,7 +120,7 @@ Variable names should be relevant only to their scope. If global, describe how
 it is relevant to the whole program; if in a small scope, name it only according
 to what it does in it's function.
 
-For compount words in identifiers, use underscores instead of camel case for
+For compound words in identifiers, use underscores instead of camel case for
 readability.
 
     /* GOOD */
