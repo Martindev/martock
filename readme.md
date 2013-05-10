@@ -1,4 +1,4 @@
-![Martock](https://raw.github.com/jedisct1/libsodium/master/logo.png)
+![Martock](http://i.imgur.com/BkrdatR.jpg?1)
 ================================================================================
 
 Martock is a clone of Terraria, a project we are using to learn C, databases,
