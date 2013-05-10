@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <martock.h>
 
 int main ()
