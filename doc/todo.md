@@ -53,6 +53,23 @@ that new chunks generate to for it in real time).
 3. The graphical window must be resizeable, and doing so cannot adjust the
    position of the camera in any unnatural way.
 
+Server
+--------------------------------------------------------------------------------
+The multiplayer functionality of Martock should be programmed into the local
+game as well, (where 127.0.0.1 will be treated as the server address). Local
+play will obviously not depend on a network, but the networking should be a mode
+of operation for the game, rather than an independent process.
+
+One client will act as the "host", and others can join the game with them. A
+"host" client can either just watch the log or be a camera, but not play (so it
+can be left on indefinitely if it's a dedicated server).
+
+This can be tested by browsing with two cameras and verifying that the changes
+of editing are mirrored. Theoretically the server would work by, upon a new
+client's connection, forwarding them the map to download, and then relaying
+everyone's input commands to each other as long as the session is open. This is
+only a theory however and needs verification.
+
 Interfaces
 --------------------------------------------------------------------------------
 Create a convenient interface for the current state of the program. This will be
@@ -65,3 +82,19 @@ built on and expanded as more modes are added.
    options, and return to the main menu.
 
 3. Add a command system which can later be used for debugging.
+
+Entities + Physics
+--------------------------------------------------------------------------------
+This stage is probably going to be the longest/most difficult. Entities (both
+cpu controlled animals and the player character) must be implemented and comply
+with the natural laws of physics (excepting how they completely disregard the
+z axis).
+
+Stepping stones in this may be creating waterflow, and some bouncy balls.
+
+Profiles
+--------------------------------------------------------------------------------
+Players must have a data structure of their own for their inventory, equipment,
+appearance, and location. They also must be controllable. Create a format for
+storing this data and a player-controlled entity using the engine created in the
+previous stage.
