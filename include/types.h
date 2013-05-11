@@ -15,9 +15,4 @@ typedef struct block {
         void *sprite;
 } block;
 
-typedef struct chunk {
-        u16 position;
-        block grid[CHUNK_WIDTH][CHUNK_HEIGHT][CHUNK_DEPTH];
-} chunk;
-
 #endif /* TYPES_H */

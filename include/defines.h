@@ -2,9 +2,12 @@
 #define DEFINES_H
 
 enum {
-        CHUNK_WIDTH  = 500,
-        CHUNK_HEIGHT = 500,
-        CHUNK_DEPTH  = 3
+        BLOCK_SKY   = 0,
+        BLOCK_GRASS = 1,
+        BLOCK_SOIL  = 2,
+        BLOCK_STONE = 3,
+        BLOCK_SAND  = 4,
+        BLOCK_WATER = 5
 };
 
 #endif /* DEFINES_H */
