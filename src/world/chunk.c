@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <martock.h>
 
 /**
@@ -59,6 +60,36 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
         /* If a flat chunk was requested, it's done. */
         if (rules & CHUNK_FLAT)
                 return ch;
+
+        /* Initial seeding. */
+        srand(time(NULL));
+        for (int i = CHUNK_BORDER; i < CHUNK_WIDTH - CHUNK_BORDER; i++)
+                for (int j = CHUNK_MANTLE; j < CHUNK_CORE; j++)
+                        if ((rand() % 100) < CHUNK_CAVE_SEED)
+                                ch->grid[i][j].id = BLOCK_SKY;
+
+        /* Cave automata. */
+        for (int c = 0; c < CHUNK_CAVE_DEPTH; c++)
+                for (int i = CHUNK_BORDER; i < CHUNK_WIDTH - CHUNK_BORDER; i++)
+                        for (int j = CHUNK_MANTLE; j < CHUNK_CORE; j++) {
+                                int t = 0;
+
+                                t = (ch->grid[i - 1][j - 1].id) ? (t + 1) : t;
+                                t = (ch->grid[i - 1][j    ].id) ? (t + 1) : t;
+                                t = (ch->grid[i - 1][j + 1].id) ? (t + 1) : t;
+
+                                t = (ch->grid[i    ][j - 1].id) ? (t + 1) : t;
+                                t = (ch->grid[i    ][j + 1].id) ? (t + 1) : t;
+
+                                t = (ch->grid[i + 1][j - 1].id) ? (t + 1) : t;
+                                t = (ch->grid[i + 1][j    ].id) ? (t + 1) : t;
+                                t = (ch->grid[i + 1][j + 1].id) ? (t + 1) : t;
+
+                                if (t > CHUNK_CAVE_RULE)
+                                        ch->grid[i][j].id = BLOCK_STONE;
+                                else
+                                        ch->grid[i][j].id = BLOCK_SKY;
+                        }
 
         return ch;
 }

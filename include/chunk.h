@@ -3,7 +3,7 @@
 
 /* Chunk dimensions. */
 enum {
-        CHUNK_WIDTH  = 40,
+        CHUNK_WIDTH  = 80,
         CHUNK_HEIGHT = 500
 };
 
@@ -31,9 +31,10 @@ enum {
 
 /* Cellular automata modes. */
 enum {
-        CHUNK_CAVE_BORDER = 10,
+        CHUNK_BORDER = 10,
         CHUNK_CAVE_DEPTH  = 5,
-        CHUNK_CAVE_SEED   = 40
+        CHUNK_CAVE_SEED   = 40,
+        CHUNK_CAVE_RULE   = 4
 };
 
 typedef struct chunk {
