@@ -7,27 +7,48 @@ enum {
         CHUNK_HEIGHT = 500
 };
 
-/* Chunk level limits. */
+/* Chunk level beginnings. */
 enum {
-        CHUNK_SKY     =  50,
-        CHUNK_SURFACE = 100,
-        CHUNK_SOIL    = 150,
-        CHUNK_MANTLE  = 450,
-        CHUNK_CORE    = 500
+        CHUNK_SOIL    =  50,
+        CHUNK_MANTLE  = 150,
+        CHUNK_CORE    = 450
 };
 
-typedef enum chunk_gen_id {
-        CHUNK_GEN  = 0,
-        CHUNK_LOAD = 1
-} chunk_gen_id;
+/* Generator flags. */
+enum {
+        CHUNK_FLAT      = 0x01,
+        CHUNK_NO_CAVES  = 0x02,
+        CHUNK_NO_HILLS  = 0x04,
+        CHUNK_NO_PLANTS = 0x08,
+        CHUNK_FULL      = 0x10
+};
+
+/* Relative positions. */
+enum {
+        CHUNK_RIGHT = 0,
+        CHUNK_LEFT  = 1
+};
+
+/* Cellular automata modes. */
+enum {
+        CHUNK_CAVE_BORDER = 10,
+        CHUNK_CAVE_DEPTH  = 5,
+        CHUNK_CAVE_SEED   = 40
+};
 
 typedef struct chunk {
         u16 position;
         block grid[CHUNK_WIDTH][CHUNK_HEIGHT];
 } chunk;
 
-/* Allocate memory for and initialize a new chunk. */
-chunk *chunk_new (chunk_gen_id id, u16 pos, chunk *right, chunk *left);
+/* Load a chunk from file. */
+chunk *chunk_load (u16 pos);
+
+/* Generate a new chunk based on neighbors. */
+chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side);
+
+/* Represent the chunk data visually in a text document. */
+void chunk_save_text (const chunk *ch);
 
 /* Save the data from an open chunk and free its memory. */
 void chunk_close (chunk *ch);
