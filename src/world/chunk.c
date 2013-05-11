@@ -52,7 +52,12 @@ chunk *chunk_new (chunk_gen_id id, u16 pos, chunk *right, chunk *left)
         return ch;
 }
 
-/* Save the data from an open chunk and free its memory. */
+/**
+ *  Save the data from the chunk if a save file structure is present, and then
+ *  free the memory used by the chunk.
+ *
+ *  @ch: pointer to the chunk memory
+ */
 void chunk_close (chunk *ch)
 {
         if (!ch)
