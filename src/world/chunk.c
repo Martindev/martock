@@ -110,19 +110,14 @@ void chunk_save_img (chunk *ch)
         if (!canvas)
                 return;
 
-        //al_set_target_bitmap(canvas);
+        al_set_target_bitmap(canvas);
 
         for (int i = 0; i < CHUNK_WIDTH; i++)
                 for (int j = 0; j < CHUNK_HEIGHT; j++) {
-                        /*al_draw_bitmap(block_sprite(ch->grid[i][j].id),
-                                       i * BLOCK_SIZE, j * BLOCK_SIZE, 0); */
-
-
                         al_draw_scaled_bitmap(block_sprite(ch->grid[i][j].id),
                                               0, 0, BLOCK_SIZE, BLOCK_SIZE,
                                               i * scale, j * scale,
                                               scale, scale, 0);
-                        al_flip_display();
                 }
 
         char temp[100] = {0};
