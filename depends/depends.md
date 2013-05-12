@@ -7,6 +7,8 @@ installed manually.
 Please read the scripts before executing them to make sure you are comfortable
 with all the changes they will make to your system.
 
+On OSX these scripts require MacPorts to run.
+
 Run them in this order.
 
 1. sh uni.sh
