@@ -1,6 +1,6 @@
 #!/bin/bash
 
-flags="-Wall -g -ggdb"
+flags="-Wall -g -ggdb -Iinclude"
 
 allegro="$(pkg-config --libs --static allegro-static-5.0           \
          allegro_image-static-5.0 allegro_acodec-static-5.0        \
@@ -11,6 +11,6 @@ allegro="$(pkg-config --libs --static allegro-static-5.0           \
 
 enet="-lenet"
 
-sources="src/martock.c"
+sources="src/*.c src/world/*.c"
 
 gcc $flags $sources -o martock $allegro
