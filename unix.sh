@@ -11,6 +11,6 @@ allegro="$(pkg-config --libs --static allegro-static-5.0           \
 
 enet="-lenet"
 
-sources="src/*.c src/world/*.c"
+sources="$(echo src/*.c)"
 
 gcc $flags $sources -o martock $allegro
