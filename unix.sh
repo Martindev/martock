@@ -1,6 +1,6 @@
 #!/bin/bash
 
-flags="-Wall -g -ggdb -Iinclude"
+flags="-o3 -Wall -g -ggdb -Iinclude -std=c99"
 
 allegro="$(pkg-config --libs --static allegro-static-5.0           \
          allegro_image-static-5.0 allegro_acodec-static-5.0        \
@@ -11,6 +11,6 @@ allegro="$(pkg-config --libs --static allegro-static-5.0           \
 
 enet="-lenet"
 
-sources="$(echo src/*.c)"
+sources="$(echo src/*.c) $(echo src/*/*.c)"
 
-gcc $flags $sources -o martock $allegro
+gcc $flags $sources -o martock $allegro $enet

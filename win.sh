@@ -1,6 +1,6 @@
 #!/bin/bash
 
-flags="-Wall -g -ggdb -Iinclude"
+flags="-o3 -Wall -g -ggdb -Iinclude -std=c99"
 
 allegro="-lgcc_eh -static-libgcc -lallegro-5.0.8-monolith-static-mt            \
          -lallegro_acodec-5.0.8-static-mt -lallegro_audio-5.0.8-static-mt      \
@@ -18,6 +18,6 @@ allegro="-lgcc_eh -static-libgcc -lallegro-5.0.8-monolith-static-mt            \
 
 enet="-lenet"
 
-sources="$(echo src/*.c)"
+sources="$(echo src/*.c) $(echo src/*/*.c)"
 
-gcc $flags $sources -o martock $allegro
+gcc $flags $sources -o martock $allegro $enet

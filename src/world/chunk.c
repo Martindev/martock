@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
 #include <martock.h>
 
 /**
@@ -54,7 +51,7 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
                         ch->grid[i][j].id = BLOCK_SOIL;
 
         for (int i = 0; i < CHUNK_WIDTH; i++)
-                for (int j = CHUNK_MANTLE; j < CHUNK_CORE; j++)
+                for (int j = CHUNK_MANTLE; j < CHUNK_HEIGHT; j++)
                         ch->grid[i][j].id = BLOCK_STONE;
 
         /* If a flat chunk was requested, it's done. */
@@ -95,12 +92,55 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
 }
 
 /**
+ *  Render a chunk to an image file to preview it.
+ *
+ *  @ch: the chunk to preview
+ */
+void chunk_save_img (chunk *ch)
+{
+        if (!ch)
+                return;
+
+        int scale = BLOCK_SIZE / BLOCK_SCALE;
+        int width = scale * CHUNK_WIDTH;
+        int height = scale * CHUNK_HEIGHT;
+
+        ALLEGRO_BITMAP *canvas = al_create_bitmap(width, height);
+
+        if (!canvas)
+                return;
+
+        //al_set_target_bitmap(canvas);
+
+        for (int i = 0; i < CHUNK_WIDTH; i++)
+                for (int j = 0; j < CHUNK_HEIGHT; j++) {
+                        /*al_draw_bitmap(block_sprite(ch->grid[i][j].id),
+                                       i * BLOCK_SIZE, j * BLOCK_SIZE, 0); */
+
+
+                        al_draw_scaled_bitmap(block_sprite(ch->grid[i][j].id),
+                                              0, 0, BLOCK_SIZE, BLOCK_SIZE,
+                                              i * scale, j * scale,
+                                              scale, scale, 0);
+                        al_flip_display();
+                }
+
+        char temp[100] = {0};
+        sprintf(temp, "world/chunks/%d.png", ch->position);
+        al_save_bitmap(temp, canvas);
+        al_destroy_bitmap(canvas);
+}
+
+/**
  *  Create a lingual save representing the chunk visually with text.
  *
  *  @ch: pointer to the chunk to save
  */
 void chunk_save_text (const chunk *ch)
 {
+        if (!ch)
+                return;
+
         FILE *file = vfopen("w", "world/chunks/%d.txt", ch->position);
 
         if (file)

@@ -4,14 +4,14 @@
 /* Chunk dimensions. */
 enum {
         CHUNK_WIDTH  = 80,
-        CHUNK_HEIGHT = 500
+        CHUNK_HEIGHT = 80
 };
 
 /* Chunk level beginnings. */
 enum {
-        CHUNK_SOIL    =  50,
-        CHUNK_MANTLE  = 150,
-        CHUNK_CORE    = 450
+        CHUNK_SOIL    = CHUNK_HEIGHT / 4,
+        CHUNK_MANTLE  = CHUNK_HEIGHT / 3,
+        CHUNK_CORE    = (CHUNK_HEIGHT / 4) * 3
 };
 
 /* Generator flags. */
@@ -47,6 +47,9 @@ chunk *chunk_load (u16 pos);
 
 /* Generate a new chunk based on neighbors. */
 chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side);
+
+/* Render a chunk to an image file for preview. */
+void chunk_save_img (chunk *ch);
 
 /* Represent the chunk data visually in a text document. */
 void chunk_save_text (const chunk *ch);

@@ -1,6 +1,27 @@
-#include <stdio.h>
-#include <stdarg.h>
 #include <martock.h>
+
+/**
+ *  Load Allegro and ENet, and initialize any modules that need it.
+ *  
+ *  @return: 0 no errors
+ *           1 Allegro failed
+ *           2 ENet failed
+ *           3 blocks failed
+ */
+int init ()
+{
+        if(!al_init())
+                return 1;
+
+        al_init_image_addon();
+
+        if (enet_initialize())
+                return 2;
+
+        atexit(enet_deinitialize);
+
+        return 0;
+}
 
 /**
  *  This functions as a proxy for fopen, which conveniently allows those who
@@ -21,4 +42,11 @@ FILE *vfopen(const char *mode, const char *msg, ...)
         va_end(li);
 
         return fopen(temp, mode);
+}
+
+/**
+ *  Close all the libraries and modules that were opened.
+ */
+void deinit ()
+{
 }
