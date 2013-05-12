@@ -92,7 +92,8 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
 }
 
 /**
- *  Render a chunk to an image file to preview it.
+ *  Render a chunk to an image file to preview it. This function is inexplicably
+ *  slow. Leave it running overnight, or depend on the text render.
  *
  *  @ch: the chunk to preview
  */
