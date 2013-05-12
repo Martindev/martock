@@ -1,8 +1,8 @@
 On Unix/Linux systems, run
 
-    autoreconf -vfi
-    ./configure
-    make
-    sudo make install
+    sh unix.sh
 
-If you're on Windows, you need to build in an environment like Cygwin or Msys.
+If you're on Windows, you need to build in an environment like Cygwin or Msys,
+and run
+
+    sh win.sh
