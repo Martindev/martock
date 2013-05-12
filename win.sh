@@ -1,11 +1,6 @@
 #!/bin/bash
 
-if ["$1" -eq "release"]
-then
-	flags="-Wall -o3"
-else
-	flags="-Wall -g -ggdb"
-fi
+flags="-Wall -g -ggdb"
 
 allegro="-lgcc_eh -static-libgcc -lallegro-5.0.8-monolith-static-mt            \
          -lallegro_acodec-5.0.8-static-mt -lallegro_audio-5.0.8-static-mt      \
