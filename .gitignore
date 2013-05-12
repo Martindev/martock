@@ -8,4 +8,4 @@ config.status
 configure
 depcomp
 install-sh
-world
+./world

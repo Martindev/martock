@@ -58,34 +58,53 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
         if (rules & CHUNK_FLAT)
                 return ch;
 
+        /* Gradient stone. */
+        double total = CHUNK_MANTLE - CHUNK_SOIL;
+        for (int i = 0; i < CHUNK_WIDTH; i++)
+                for (int j = CHUNK_SOIL + 1; j < CHUNK_MANTLE; j++) {
+                        int prop = ((j - CHUNK_SOIL) / total) * 100;
+                        if ((rand() % 100) < prop)
+                                ch->grid[i][j].id = BLOCK_STONE;
+                }
+
         /* Initial seeding. */
-        srand(time(NULL));
+        double ytotal = CHUNK_CORE - CHUNK_MANTLE;
+        double xtotal = CHUNK_WIDTH - CHUNK_BORDER;
         for (int i = CHUNK_BORDER; i < CHUNK_WIDTH - CHUNK_BORDER; i++)
-                for (int j = CHUNK_MANTLE; j < CHUNK_CORE; j++)
-                        if ((rand() % 100) < CHUNK_CAVE_SEED)
+                for (int j = CHUNK_MANTLE; j < CHUNK_CORE; j++) {
+                        int yprop = ((j - CHUNK_MANTLE) / ytotal) * 100;
+                        int xprop = ((i - CHUNK_BORDER) / xtotal) * 100;
+                        yprop = (yprop > 50) ? 100 - yprop : yprop;
+                        xprop = (xprop > 50) ? 100 - xprop : xprop;
+                        if ((rand() % 100) < ((xprop + yprop) / 2))
                                 ch->grid[i][j].id = BLOCK_SKY;
+                }
 
         /* Cave automata. */
+        chunk cmp;
+        memcpy(&cmp, ch, sizeof(chunk));
         for (int c = 0; c < CHUNK_CAVE_DEPTH; c++)
                 for (int i = CHUNK_BORDER; i < CHUNK_WIDTH - CHUNK_BORDER; i++)
                         for (int j = CHUNK_MANTLE; j < CHUNK_CORE; j++) {
                                 int t = 0;
 
-                                t = (ch->grid[i - 1][j - 1].id) ? (t + 1) : t;
-                                t = (ch->grid[i - 1][j    ].id) ? (t + 1) : t;
-                                t = (ch->grid[i - 1][j + 1].id) ? (t + 1) : t;
+                                t = (cmp.grid[i - 1][j - 1].id) ? (t + 1) : t;
+                                t = (cmp.grid[i - 1][j    ].id) ? (t + 1) : t;
+                                t = (cmp.grid[i - 1][j + 1].id) ? (t + 1) : t;
 
-                                t = (ch->grid[i    ][j - 1].id) ? (t + 1) : t;
-                                t = (ch->grid[i    ][j + 1].id) ? (t + 1) : t;
+                                t = (cmp.grid[i    ][j - 1].id) ? (t + 1) : t;
+                                t = (cmp.grid[i    ][j + 1].id) ? (t + 1) : t;
 
-                                t = (ch->grid[i + 1][j - 1].id) ? (t + 1) : t;
-                                t = (ch->grid[i + 1][j    ].id) ? (t + 1) : t;
-                                t = (ch->grid[i + 1][j + 1].id) ? (t + 1) : t;
+                                t = (cmp.grid[i + 1][j - 1].id) ? (t + 1) : t;
+                                t = (cmp.grid[i + 1][j    ].id) ? (t + 1) : t;
+                                t = (cmp.grid[i + 1][j + 1].id) ? (t + 1) : t;
 
-                                if (t > CHUNK_CAVE_RULE)
-                                        ch->grid[i][j].id = BLOCK_STONE;
-                                else
-                                        ch->grid[i][j].id = BLOCK_SKY;
+                                if (ch->grid[i][j].id) {
+                                        if ((t < 3) || (t > 8))
+                                                ch->grid[i][j].id = BLOCK_SKY;
+                                } else
+                                        if ((t > 5) && (t < 9))
+                                                ch->grid[i][j].id = BLOCK_STONE;
                         }
 
         return ch;
@@ -142,7 +161,18 @@ void chunk_save_text (const chunk *ch)
         if (file)
                 for (int j = 0; j < CHUNK_HEIGHT; j++) {
                         for (int i = 0; i < CHUNK_WIDTH; i++)
-                                fprintf(file, "%2d", ch->grid[i][j].id);
+                                switch (ch->grid[i][j].id) {
+                                        case BLOCK_SKY:   fprintf(file, "  ");
+                                                          break;
+                                        case BLOCK_GRASS: fprintf(file, "--");
+                                                          break;
+                                        case BLOCK_SOIL:  fprintf(file, "..");
+                                                          break;
+                                        case BLOCK_STONE: fprintf(file, "##");
+                                                          break;
+                                        default:          fprintf(file, "%2d",
+                                                          ch->grid[i][j].id);
+                                }
                         fprintf(file, "\n");
                 }
 }

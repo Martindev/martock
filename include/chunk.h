@@ -4,7 +4,7 @@
 /* Chunk dimensions. */
 enum {
         CHUNK_WIDTH  = 80,
-        CHUNK_HEIGHT = 80
+        CHUNK_HEIGHT = 500
 };
 
 /* Chunk level beginnings. */
@@ -31,8 +31,8 @@ enum {
 
 /* Cellular automata modes. */
 enum {
-        CHUNK_BORDER = 10,
-        CHUNK_CAVE_DEPTH  = 5,
+        CHUNK_BORDER      = 3,
+        CHUNK_CAVE_DEPTH  = 7,
         CHUNK_CAVE_SEED   = 40,
         CHUNK_CAVE_RULE   = 4
 };
