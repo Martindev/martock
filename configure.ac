@@ -1,8 +1,8 @@
 AC_INIT([martock],
         [0.0.0],
-        [https://github.com/PaytonTurnage/Martock/issues],
+        [https://github.com/Martindev/Martock/issues],
         [martock],
-        [https://github.com/PaytonTurnage/Martock])
+        [https://github.com/Martindev/Martock])
 
 CFLAGS="$CFLAGS -Wall -g -ggdb -Iinclude" 
 
