@@ -16,7 +16,7 @@ allegro="-lgcc_eh -static-libgcc -lallegro-5.0.8-monolith-static-mt            \
          -lgdi32 -lshell32 -lole32 -ladvapi32 -lws2_32 -lshlwapi -lstdc++      \
          -mwindows"
 
-enet="-lenet"
+enet="-lenet -lwinmm -lws2_32"
 
 sources="$(echo src/*.c) $(echo src/*/*.c)"
 
