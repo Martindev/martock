@@ -1,8 +1,9 @@
 #!/bin/bash
 
-flags="-o3 -Wall -g -ggdb -Iinclude -std=c99"
+flags="-o3 -Wall -g -ggdb -Iinclude -Ldep -std=c99"
 
-allegro="-lgcc_eh -static-libgcc -lallegro-5.0.8-monolith-static-mt            \
+allegro="-mwindows -lgcc_eh -static-libgcc -lstdc++-6                          \
+         -lallegro-5.0.8-monolith-static-mt                                    \
          -lallegro_acodec-5.0.8-static-mt -lallegro_audio-5.0.8-static-mt      \
          -lopenal-1.14-static-mt -lvorbisfile-1.3.2-static-mt                  \
          -lvorbis-1.3.2-static-mt -lallegro_color-5.0.8-static-mt              \
@@ -13,11 +14,10 @@ allegro="-lgcc_eh -static-libgcc -lallegro-5.0.8-monolith-static-mt            \
          -lFLAC-1.2.1-static-mt -lfreetype-2.4.8-static-mt                     \
          -logg-1.2.1-static-mt -lzlib-1.2.5-static-mt -lgdiplus -luuid         \
          -lkernel32 -lwinmm -lpsapi -lopengl32 -lglu32 -luser32 -lcomdlg32     \
-         -lgdi32 -lshell32 -lole32 -ladvapi32 -lws2_32 -lshlwapi -lstdc++      \
-         -mwindows"
+         -lgdi32 -lshell32 -lole32 -ladvapi32 -lws2_32 -lshlwapi"
 
-enet="-lenet -lwinmm -lws2_32"
+enet="-lenet"
 
 sources="$(echo src/*.c) $(echo src/*/*.c)"
 
-gcc $flags $sources -o martock $allegro $enet
+gcc $flags $sources -o martock $enet $allegro
