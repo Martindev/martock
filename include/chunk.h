@@ -31,15 +31,17 @@ enum {
 
 /* Cellular automata modes. */
 enum {
-        CHUNK_BORDER      = 3,
-        CHUNK_CAVE_DEPTH  = 7,
-        CHUNK_CAVE_SEED   = 40,
-        CHUNK_CAVE_RULE   = 4
+        CHUNK_BORDER         = 3,
+        CHUNK_HILL           = 50,
+        CHUNK_SMOOTH_RADIUS  = 20,
+        CHUNK_CAVE_SEED      = 40,
+        CHUNK_CAVE_RULE      = 4
 };
 
 typedef struct chunk {
         u16 position;
         block grid[CHUNK_WIDTH][CHUNK_HEIGHT];
+        block bgrid[CHUNK_WIDTH][CHUNK_HEIGHT];
 } chunk;
 
 /* Load a chunk from file. */
@@ -47,6 +49,9 @@ chunk *chunk_load (u16 pos);
 
 /* Generate a new chunk based on neighbors. */
 chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side);
+
+/* Interactively view the chunk. */
+void chunk_view (chunk *ch);
 
 /* Render a chunk to an image file for preview. */
 void chunk_save_img (chunk *ch);

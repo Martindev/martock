@@ -58,6 +58,26 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
         if (rules & CHUNK_FLAT)
                 return ch;
 
+        /* Varying terrain (hills, valleys, mountains, etc.) */
+        u8 heights[CHUNK_WIDTH] = {CHUNK_HILL / 2};
+        for (int i = 0; i < CHUNK_WIDTH; i++)
+                heights[i] = rand() % CHUNK_HILL;
+        for (int i = 0; i < CHUNK_WIDTH; i++) {
+                int average = heights[i];
+                for (int j = 1; j < CHUNK_SMOOTH_RADIUS; j++) {
+                        int index = i + CHUNK_WIDTH;
+                        average += heights[(index - j) % CHUNK_WIDTH];
+                        average += heights[(index + j) % CHUNK_WIDTH];
+                }
+
+                average /= (CHUNK_SMOOTH_RADIUS * 2) + 1;
+                heights[i] = average;
+
+                ch->grid[i][CHUNK_SOIL - heights[i]].id = BLOCK_GRASS;
+                for (int j = CHUNK_SOIL - heights[i] + 1; j < CHUNK_SOIL; j++)
+                        ch->grid[i][j].id = BLOCK_SOIL;
+        }
+
         /* Gradient stone. */
         double total = CHUNK_MANTLE - CHUNK_SOIL;
         for (int i = 0; i < CHUNK_WIDTH; i++)
@@ -66,6 +86,9 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
                         if ((rand() % 100) < prop)
                                 ch->grid[i][j].id = BLOCK_STONE;
                 }
+
+        /* Solid background layer. */
+        memcpy(ch->bgrid, ch->grid, sizeof(block) * CHUNK_WIDTH * CHUNK_HEIGHT);
 
         /* Initial seeding. */
         double ytotal = CHUNK_CORE - CHUNK_MANTLE;
@@ -83,31 +106,123 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
         /* Cave automata. */
         chunk cmp;
         memcpy(&cmp, ch, sizeof(chunk));
-        for (int c = 0; c < CHUNK_CAVE_DEPTH; c++)
-                for (int i = CHUNK_BORDER; i < CHUNK_WIDTH - CHUNK_BORDER; i++)
-                        for (int j = CHUNK_MANTLE; j < CHUNK_CORE; j++) {
-                                int t = 0;
+        for (int i = CHUNK_BORDER; i < CHUNK_WIDTH - CHUNK_BORDER; i++)
+                for (int j = CHUNK_MANTLE; j < CHUNK_CORE; j++) {
+                        int t = 0;
 
-                                t = (cmp.grid[i - 1][j - 1].id) ? (t + 1) : t;
-                                t = (cmp.grid[i - 1][j    ].id) ? (t + 1) : t;
-                                t = (cmp.grid[i - 1][j + 1].id) ? (t + 1) : t;
+                        t = (cmp.grid[i - 1][j - 1].id) ? (t + 1) : t;
+                        t = (cmp.grid[i - 1][j    ].id) ? (t + 1) : t;
+                        t = (cmp.grid[i - 1][j + 1].id) ? (t + 1) : t;
 
-                                t = (cmp.grid[i    ][j - 1].id) ? (t + 1) : t;
-                                t = (cmp.grid[i    ][j + 1].id) ? (t + 1) : t;
+                        t = (cmp.grid[i    ][j - 1].id) ? (t + 1) : t;
+                        t = (cmp.grid[i    ][j + 1].id) ? (t + 1) : t;
 
-                                t = (cmp.grid[i + 1][j - 1].id) ? (t + 1) : t;
-                                t = (cmp.grid[i + 1][j    ].id) ? (t + 1) : t;
-                                t = (cmp.grid[i + 1][j + 1].id) ? (t + 1) : t;
+                        t = (cmp.grid[i + 1][j - 1].id) ? (t + 1) : t;
+                        t = (cmp.grid[i + 1][j    ].id) ? (t + 1) : t;
+                        t = (cmp.grid[i + 1][j + 1].id) ? (t + 1) : t;
 
-                                if (ch->grid[i][j].id) {
-                                        if ((t < 3) || (t > 8))
-                                                ch->grid[i][j].id = BLOCK_SKY;
-                                } else
-                                        if ((t > 5) && (t < 9))
-                                                ch->grid[i][j].id = BLOCK_STONE;
-                        }
+                        if (ch->grid[i][j].id) {
+                                if ((t < 3) || (t > 8))
+                                        ch->grid[i][j].id = BLOCK_SKY;
+                        } else
+                                if ((t > 5) && (t < 9))
+                                        ch->grid[i][j].id = BLOCK_STONE;
+                }
 
         return ch;
+}
+
+/**
+ *  Allow real-time browsing of the chunk, illustrated graphically.
+ *
+ *  @ch: chunk to view
+ */
+void chunk_view (chunk *ch)
+{
+        int x = 0;
+        int y = 0;
+
+        int height = 640;
+        int width = 800;
+
+        int scale = BLOCK_SIZE / BLOCK_SCALE;
+        int running = 1;
+
+        int tiwi = width / scale;
+        int tihi = height / scale;
+
+        ALLEGRO_EVENT event;
+        ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
+        ALLEGRO_DISPLAY *screen = al_create_display(800, 640);
+        ALLEGRO_BITMAP *sprite = NULL;
+        ALLEGRO_FONT *font = al_load_ttf_font("assets/font.ttf", 20, 0);
+
+        al_register_event_source(queue,
+                                 al_get_display_event_source(screen));
+        al_register_event_source(queue,
+                                 al_get_keyboard_event_source());
+
+        do {
+                al_clear_to_color(al_map_rgb(0, 0, 0));
+                for (int i = x; i < x + tiwi; i++)
+                        for (int j = y; j < y + tihi; j++) {
+                                sprite = block_sprite(ch->grid[i][j].id);
+                                al_draw_scaled_bitmap(sprite,
+                                                      0, 0, BLOCK_SIZE,
+                                                      BLOCK_SIZE,
+                                                      (i - x) * scale,
+                                                      (j - y) * scale,
+                                                      scale, scale, 0);
+                        }
+
+                al_draw_textf(font, al_map_rgb(255, 255, 255), 10, 10, 0,
+                              "Viewing: (%d, %d)", x, y);
+
+                al_flip_display();
+
+                al_wait_for_event(queue, &event);
+
+                while (!al_event_queue_is_empty(queue)) {
+                        al_get_next_event(queue, &event);
+                        if (event.type == ALLEGRO_EVENT_KEY_CHAR) {
+
+                                int keycode = event.keyboard.keycode;
+
+                                if (keycode == ALLEGRO_KEY_ESCAPE) {
+                                        running = 0;
+                                } else if (keycode == ALLEGRO_KEY_W) {
+                                        if (y > 0)
+                                                y--;
+                                } else if (keycode == ALLEGRO_KEY_S) {
+                                        if (y < CHUNK_HEIGHT)
+                                                y++;
+                                } else if (keycode == ALLEGRO_KEY_A) {
+                                        if (x > 0)
+                                                x--;
+                                } else if (keycode == ALLEGRO_KEY_D) {
+                                        if (x < CHUNK_WIDTH)
+                                                x++;
+                                }
+
+                        } else if (event.type == ALLEGRO_EVENT_DISPLAY_RESIZE) {
+
+                                al_acknowledge_resize(screen);
+                                width = al_get_display_width(screen);
+                                height = al_get_display_height(screen);
+                                tiwi = width / scale;
+                                tihi = height / scale;
+
+                        } else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+
+                                running = 0;
+
+                        }
+                }
+
+        } while (running);
+
+        al_destroy_display(screen);
+        al_destroy_event_queue(queue);
 }
 
 /**
