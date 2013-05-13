@@ -11,3 +11,7 @@ To run it, you'll need to get the media assets, which can be automatically done
 by running
 
     sh assets.sh
+    
+If you get an error like "wget not recognized" in msys, run
+
+    mingw-get install msys-wget-bin
