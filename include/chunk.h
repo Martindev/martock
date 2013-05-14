@@ -3,7 +3,7 @@
 
 /* Chunk dimensions. */
 enum {
-        CHUNK_WIDTH  = 80,
+        CHUNK_WIDTH  = 500,
         CHUNK_HEIGHT = 500
 };
 
