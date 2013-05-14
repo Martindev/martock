@@ -41,6 +41,14 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
         if (!(ch = calloc(1, sizeof(chunk))))
                 return NULL;
 
+        /* Place the chunk in the world DLS */
+        if (neighbor) {
+                if (side == CHUNK_RIGHT)
+                        ch->right = neighbor;
+                else if (side == CHUNK_LEFT)
+                        ch->left = neighbor;
+        }
+
         /* Set the defaults for each vertical level. */
         for (int i = 0; i < CHUNK_WIDTH; i++)
                 for (int j = 0; j < CHUNK_SOIL; j++)
@@ -59,22 +67,30 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
                 return ch;
 
         /* Varying terrain (hills, valleys, mountains, etc.) */
-        u8 heights[CHUNK_WIDTH] = {CHUNK_HILL / 2};
+        memset(ch->heights, CHUNK_HILL / 2, CHUNK_WIDTH);
         for (int i = 0; i < CHUNK_WIDTH; i++)
-                heights[i] = rand() % CHUNK_HILL;
+                ch->heights[i] = rand() % CHUNK_HILL;
         for (int i = 0; i < CHUNK_WIDTH; i++) {
-                int average = heights[i];
+                int average = ch->heights[i];
                 for (int j = 1; j < CHUNK_SMOOTH_RADIUS; j++) {
-                        int index = i + CHUNK_WIDTH;
-                        average += heights[(index - j) % CHUNK_WIDTH];
-                        average += heights[(index + j) % CHUNK_WIDTH];
+                        if (i - j >= 0)
+                                average += ch->heights[i - j];
+                        else if (neighbor && (side == CHUNK_LEFT))
+                                average += neighbor->heights[CHUNK_WIDTH -
+                                                             abs(i - j)];
+
+                        if (i + j < CHUNK_WIDTH)
+                                average += ch->heights[i + j];
+                        else if (neighbor && (side == CHUNK_RIGHT))
+                                average += neighbor->heights[(i + j) %
+                                                             CHUNK_WIDTH];
                 }
 
                 average /= (CHUNK_SMOOTH_RADIUS * 2) + 1;
-                heights[i] = average;
+                ch->heights[i] = average;
 
-                ch->fore[i][CHUNK_SOIL - heights[i]].id = BLOCK_GRASS;
-                for (int j = CHUNK_SOIL - heights[i] + 1; j < CHUNK_SOIL; j++)
+                ch->fore[i][CHUNK_SOIL - ch->heights[i]].id = BLOCK_GRASS;
+                for (int j = CHUNK_SOIL - ch->heights[i] + 1; j < CHUNK_SOIL; j++)
                         ch->fore[i][j].id = BLOCK_SOIL;
         }
 

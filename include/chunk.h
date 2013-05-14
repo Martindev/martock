@@ -40,6 +40,9 @@ enum {
 
 typedef struct chunk {
         u16 position;
+        const struct chunk *right;
+        const struct chunk *left;
+        u8 heights[CHUNK_WIDTH];
         block fore[CHUNK_WIDTH][CHUNK_HEIGHT];
         block back[CHUNK_WIDTH][CHUNK_HEIGHT];
 } chunk;
