@@ -40,8 +40,8 @@ enum {
 
 typedef struct chunk {
         u16 position;
-        block grid[CHUNK_WIDTH][CHUNK_HEIGHT];
-        block bgrid[CHUNK_WIDTH][CHUNK_HEIGHT];
+        block fore[CHUNK_WIDTH][CHUNK_HEIGHT];
+        block back[CHUNK_WIDTH][CHUNK_HEIGHT];
 } chunk;
 
 /* Load a chunk from file. */
