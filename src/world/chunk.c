@@ -155,8 +155,8 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
  */
 void chunk_view (chunk *ch)
 {
-        int x = 0;
-        int y = 0;
+        int x = 175;
+        int y = 175;
 
         int height = 640;
         int width = 800;
@@ -170,8 +170,9 @@ void chunk_view (chunk *ch)
         ALLEGRO_EVENT event;
         ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
         ALLEGRO_DISPLAY *screen = al_create_display(800, 640);
-        ALLEGRO_BITMAP *sprite = NULL;
         ALLEGRO_FONT *font = al_load_ttf_font("assets/font.ttf", 20, 0);
+
+        block fg, bg;
 
         al_register_event_source(queue,
                                  al_get_display_event_source(screen));
@@ -180,15 +181,24 @@ void chunk_view (chunk *ch)
 
         do {
                 al_clear_to_color(al_map_rgb(0, 0, 0));
+
                 for (int i = x; i < x + tiwi; i++)
                         for (int j = y; j < y + tihi; j++) {
-                                sprite = block_sprite(ch->fore[i][j].id);
-                                al_draw_scaled_bitmap(sprite,
-                                                      0, 0, BLOCK_SIZE,
-                                                      BLOCK_SIZE,
-                                                      (i - x) * scale,
-                                                      (j - y) * scale,
-                                                      scale, scale, 0);
+                                if ((i >= 0) && i < CHUNK_WIDTH) {
+                                        fg = ch->fore[i][j];
+                                        bg = ch->back[i][j];
+                                } else if ((i < 0) && ch->left) {
+                                        fg = ch->left->fore[CHUNK_WIDTH -
+                                                            abs(i)][j];
+                                        bg = ch->left->back[CHUNK_WIDTH -
+                                                            abs(i)][j];
+                                } else if ((i > CHUNK_WIDTH) && ch->right) {
+                                        fg = ch->left->fore[i % CHUNK_WIDTH][j];
+                                        bg = ch->left->back[i % CHUNK_WIDTH][j];
+                                }
+
+                                block_draw(fg, bg, (i - x) * scale,
+                                           (j - y) * scale, scale);
                         }
 
                 al_draw_textf(font, al_map_rgb(255, 255, 255), 10, 10, 0,
