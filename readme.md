@@ -1,4 +1,4 @@
-![Martock](http://i.imgur.com/BkrdatR.jpg?1)
+![Martock](http://oi39.tinypic.com/2z9mufb.jpg)
 ================================================================================
 
 Martock is a clone of Terraria, a project we are using to learn C, databases,
