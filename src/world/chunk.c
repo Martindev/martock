@@ -1,6 +1,39 @@
 #include <martock.h>
 
 /**
+ *  Supply the world or viewer with a new chunk to append to the given neighbor.
+ *  Set the new chunk's position relative to the provided neighbor.
+ *
+ *  @neighbor: chunk this new one must be contiguous with
+ *  @side: which side to append onto the neighbor
+ *
+ *  @return: created or loaded chunk
+ */
+chunk *chunk_request (const chunk *neighbor, u8 side)
+{
+        int pos;
+        chunk *ch;
+
+        if (!neighbor)
+                return NULL;
+
+        if (side == CHUNK_LEFT)
+                pos = neighbor->position - 1;
+        else if (side == CHUNK_RIGHT)
+                pos = neighbor->position + 1;
+        else
+                return NULL;
+
+        if (!(ch = chunk_load(pos)))
+                return NULL;
+        else {
+                return ch;
+        }
+
+        return chunk_generate(CHUNK_FULL, neighbor, side);
+}
+
+/**
  *  Load a chunk from file if it exists.
  *
  *  @pos: the position of the chunk in the world

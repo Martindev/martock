@@ -38,6 +38,11 @@ enum {
         CHUNK_CAVE_RULE      = 4
 };
 
+/* Render settings. */
+enum {
+        CHUNK_RENDER_DISTANCE = 5
+};
+
 typedef struct chunk {
         u16 position;
         const struct chunk *right;
@@ -46,6 +51,9 @@ typedef struct chunk {
         block fore[CHUNK_WIDTH][CHUNK_HEIGHT];
         block back[CHUNK_WIDTH][CHUNK_HEIGHT];
 } chunk;
+
+/* Provide a new chunk for the given neighbor. */
+chunk *chunk_request (const chunk *neighbor, u8 side);
 
 /* Load a chunk from file. */
 chunk *chunk_load (u16 pos);
