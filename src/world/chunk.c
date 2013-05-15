@@ -6,10 +6,11 @@
  *
  *  @neighbor: chunk this new one must be contiguous with
  *  @side: which side to append onto the neighbor
+ *  @rules: generation rules
  *
  *  @return: created or loaded chunk
  */
-chunk *chunk_request (const chunk *neighbor, u8 side)
+chunk *chunk_request (const chunk *neighbor, u8 side, u8 rules)
 {
         int pos;
         chunk *ch;
@@ -30,7 +31,15 @@ chunk *chunk_request (const chunk *neighbor, u8 side)
                 return ch;
         }
 
-        return chunk_generate(CHUNK_FULL, neighbor, side);
+        /* chunk_generate uses "side" to describe the neighbor's position
+           relative to the chunk it generates, where request is relative
+           to the neighbor, so they must be switched.                     */
+        if (side == CHUNK_LEFT)
+                side = CHUNK_RIGHT;
+        else
+                side = CHUNK_LEFT;
+
+        return chunk_generate(rules, neighbor, side);
 }
 
 /**

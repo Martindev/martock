@@ -53,7 +53,7 @@ typedef struct chunk {
 } chunk;
 
 /* Provide a new chunk for the given neighbor. */
-chunk *chunk_request (const chunk *neighbor, u8 side);
+chunk *chunk_request (const chunk *neighbor, u8 side, u8 rules);
 
 /* Load a chunk from file. */
 chunk *chunk_load (u16 pos);
