@@ -20,6 +20,12 @@ enum {
         BLOCK_SCALE = 3,  /* Render scale. */
 };
 
+/* Visibilities. */
+enum {
+        BLOCK_TRANSPARENT = 0,
+        BLOCK_OPAQUE      = 255
+};
+
 typedef struct block {
         u16 id;
 } block;
@@ -33,6 +39,9 @@ typedef struct block_profile {
 
 /* Load the blocks texture file. */
 int block_init (const char *tex);
+
+/* Render a tile. */
+void block_draw (block fg, block bg, int x, int y, int scale);
 
 /* Get a pointer to a sprite's sub bitmap. */
 ALLEGRO_BITMAP *block_sprite(u16 id);

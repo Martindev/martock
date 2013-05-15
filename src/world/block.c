@@ -70,10 +70,13 @@ int block_init (const char *tex)
                                                BLOCK_SIZE * 2);
         al_set_target_bitmap(map);
         al_draw_bitmap(sheet, 0, 0, 0);
-        al_draw_tinted_bitmap(sheet, al_map_rgb(70, 70, 70), 0, BLOCK_SIZE, 0);
+        al_draw_tinted_bitmap(sheet, al_map_rgb(100, 100, 100), 0, BLOCK_SIZE, 0);
 
         if (temp)
                 al_set_target_bitmap(temp);
+
+        al_destroy_bitmap(sheet);
+        sheet = map;
 
         memset(sprites, 0, sizeof(ALLEGRO_BITMAP*) * BLOCK_COUNT);
         for (int i = 0; i < BLOCK_COUNT; i++)
@@ -87,6 +90,31 @@ int block_init (const char *tex)
                                                 BLOCK_SIZE, BLOCK_SIZE);
 
         return 0;
+}
+
+/**
+ *  Draw a tile to the target bitmap, handling overlays appropriately. Tiles in
+ *  the background should be visible if the foreground tile is less than opaque.
+ *
+ *  @fg: foreground block
+ *  @bg: background block
+ *  @x: horizontal pixel coordinate
+ *  @y: vertical pixel coordinate
+ *  @scale: size to draw the tile
+ */
+void block_draw (block fg, block bg, int x, int y, int scale)
+{
+        if ((profiles[fg.id].opacity < BLOCK_OPAQUE) && bg.id) {
+                al_draw_scaled_bitmap(backs[bg.id], 0, 0, BLOCK_SIZE,
+                                      BLOCK_SIZE, x, y, scale, scale, 0);
+                if (fg.id)
+                        al_draw_tinted_scaled_bitmap(sprites[fg.id], 
+                                al_map_rgba_f(1, 1, 1, profiles[fg.id].opacity),
+                                0, 0, BLOCK_SIZE, BLOCK_SIZE, x, y, scale,
+                                scale, 0);
+        } else
+                al_draw_scaled_bitmap(sprites[fg.id], 0, 0, BLOCK_SIZE,
+                                      BLOCK_SIZE, x, y, scale, scale, 0); 
 }
 
 /**
