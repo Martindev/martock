@@ -22,14 +22,29 @@ enum {
 
 typedef struct block {
         u16 id;
-        void *sprite;
 } block;
+
+typedef struct block_profile {
+        u8 opacity; /* Render opacity. */
+        u8 density; /* Difficulty to break. */
+        u8 gravity; /* Does it fall? */
+        u8 weight;  /* Fall speed/pack weight. */
+} block_profile;
 
 /* Load the blocks texture file. */
 int block_init (const char *tex);
 
 /* Get a pointer to a sprite's sub bitmap. */
 ALLEGRO_BITMAP *block_sprite(u16 id);
+
+/* Get a pointer to a sprite's background sub bitmap. */
+ALLEGRO_BITMAP *block_back (u16 id);
+
+/* Profile Accessers */
+u8 block_opacity (u16 id);
+u8 block_density (u16 id);
+u8 block_gravity (u16 id);
+u8 block_weight  (u16 id);
 
 /* Free the block module's memory. */
 void blocks_deinit ();
