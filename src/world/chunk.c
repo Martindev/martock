@@ -10,7 +10,8 @@
  *
  *  @return: created or loaded chunk
  */
-chunk *chunk_request (const chunk *neighbor, u8 side, u8 rules)
+
+chunk *chunk_request (chunk *neighbor, u8 side, u8 rules)
 {
         int pos;
         chunk *ch;
@@ -18,11 +19,11 @@ chunk *chunk_request (const chunk *neighbor, u8 side, u8 rules)
         if (!neighbor)
                 return NULL;
 
-        if (side == CHUNK_LEFT)
+        if (side == CHUNK_LEFT) {
                 pos = neighbor->position - 1;
-        else if (side == CHUNK_RIGHT)
+        } else if (side == CHUNK_RIGHT) {
                 pos = neighbor->position + 1;
-        else
+        } else
                 return NULL;
 
         if (!(ch = chunk_load(pos)))
@@ -39,7 +40,21 @@ chunk *chunk_request (const chunk *neighbor, u8 side, u8 rules)
         else
                 side = CHUNK_LEFT;
 
-        return chunk_generate(rules, neighbor, side);
+        ch = chunk_generate(rules, neighbor, side);
+
+        /* Put the chunk in the world. */
+        pos = neighbor->position;
+        if (side == CHUNK_LEFT) {
+                ch->position = pos - 1;
+                ch->right = neighbor;
+                ch->right->left = ch;
+        } else if (side == CHUNK_RIGHT) {
+                ch->position = pos - 1;
+                ch->left = neighbor;
+                ch->left->right = ch;
+        }
+        
+        return ch;
 }
 
 /**
@@ -84,17 +99,6 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
         /* Return if the memory allocation fails. */
         if (!(ch = calloc(1, sizeof(chunk))))
                 return NULL;
-
-        /* Place the chunk in the world DLS */
-        if (neighbor) {
-                if (side == CHUNK_RIGHT) {
-                        ch->right = neighbor;
-                        ch->position = neighbor->position + 1;
-                } else if (side == CHUNK_LEFT) {
-                        ch->left = neighbor;
-                        ch->position = neighbor->position - 1;
-                }
-        }
 
         /* Set the defaults for each vertical level. */
         for (int i = 0; i < CHUNK_WIDTH; i++)
