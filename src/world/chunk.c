@@ -68,6 +68,8 @@ chunk *chunk_load (u16 pos)
 
 /**
  *  Construct a new chunk according the provided rules using cellular automata.
+ *  Give the chunk a position value relative to the neighbor, and assign the
+ *  the neighbor pointer in the right place.
  *
  *  @rules: cellular automata rules
  *  @neighbor: the chunk this is appending to
@@ -85,10 +87,13 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
 
         /* Place the chunk in the world DLS */
         if (neighbor) {
-                if (side == CHUNK_RIGHT)
+                if (side == CHUNK_RIGHT) {
                         ch->right = neighbor;
-                else if (side == CHUNK_LEFT)
+                        ch->position = neighbor->position + 1;
+                } else if (side == CHUNK_LEFT) {
                         ch->left = neighbor;
+                        ch->position = neighbor->position - 1;
+                }
         }
 
         /* Set the defaults for each vertical level. */
@@ -375,6 +380,13 @@ void chunk_close (chunk *ch)
 
         if (file)
                 fwrite(ch, sizeof(chunk), 1, file);
+
+        /* Tell the neighbors he's moved out. */
+        if (ch->right)
+                ch->right->left = NULL;
+
+        if (ch->left)
+                ch->left->right = NULL;
 
         free(ch);
 }
