@@ -158,22 +158,25 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
 void chunk_view (chunk *ch)
 {
         int x = 0;
-        int y = 0;
+        int y = 100;
 
-        int height = 640;
-        int width = 800;
+        int tiwi = 30;
+        int tihi = 15;
 
         int scale = BLOCK_SIZE / BLOCK_SCALE;
         int running = 1;
 
-        int tiwi = width / scale;
-        int tihi = height / scale;
+        int height = tihi * scale;
+        int width = tiwi * scale;
 
         ALLEGRO_EVENT event;
         ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
-        ALLEGRO_DISPLAY *screen = al_create_display(800, 640);
-        ALLEGRO_BITMAP *sprite = NULL;
+        ALLEGRO_DISPLAY *screen = al_create_display(tiwi * scale, tihi * scale);
         ALLEGRO_FONT *font = al_load_ttf_font("assets/font.ttf", 20, 0);
+        ALLEGRO_TIMEOUT timeout;
+        ALLEGRO_KEYBOARD_STATE state;
+
+        block fg, bg;
 
         al_register_event_source(queue,
                                  al_get_display_event_source(screen));
@@ -182,59 +185,55 @@ void chunk_view (chunk *ch)
 
         do {
                 al_clear_to_color(al_map_rgb(0, 0, 0));
+
+                al_hold_bitmap_drawing(true);
                 for (int i = x; i < x + tiwi; i++)
                         for (int j = y; j < y + tihi; j++) {
-                                sprite = block_sprite(ch->fore[i][j].id);
-                                al_draw_scaled_bitmap(sprite,
-                                                      0, 0, BLOCK_SIZE,
-                                                      BLOCK_SIZE,
-                                                      (i - x) * scale,
-                                                      (j - y) * scale,
-                                                      scale, scale, 0);
+                                fg = ch->fore[i][j];
+                                bg = ch->back[i][j];
+                                block_draw(fg, bg, (i - x) * scale,
+                                           (j - y) * scale, scale);
                         }
+                al_hold_bitmap_drawing(false);
 
                 al_draw_textf(font, al_map_rgb(255, 255, 255), 10, 10, 0,
                               "Viewing: (%d, %d)", x, y);
 
                 al_flip_display();
 
-                al_wait_for_event(queue, &event);
+                al_init_timeout(&timeout, 0.02);
+                al_wait_for_event_until(queue, &event, &timeout);
 
-                while (!al_event_queue_is_empty(queue)) {
-                        al_get_next_event(queue, &event);
-                        if (event.type == ALLEGRO_EVENT_KEY_CHAR) {
+                al_get_keyboard_state(&state);
 
-                                int keycode = event.keyboard.keycode;
+                if (al_key_down(&state, ALLEGRO_KEY_ESCAPE)) {
+                        running = 0;
+                } else if (al_key_down(&state, ALLEGRO_KEY_W)) {
+                        if (y > 0)
+                                y--;
+                } else if (al_key_down(&state, ALLEGRO_KEY_S)) {
+                        if (y < CHUNK_HEIGHT)
+                                y++;
+                } else if (al_key_down(&state, ALLEGRO_KEY_A)) {
+                        if (x > 0)
+                                x--;
+                } else if (al_key_down(&state, ALLEGRO_KEY_D)) {
+                        if (x < CHUNK_WIDTH - tiwi)
+                                x++;
+                }
 
-                                if (keycode == ALLEGRO_KEY_ESCAPE) {
-                                        running = 0;
-                                } else if (keycode == ALLEGRO_KEY_W) {
-                                        if (y > 0)
-                                                y--;
-                                } else if (keycode == ALLEGRO_KEY_S) {
-                                        if (y < CHUNK_HEIGHT)
-                                                y++;
-                                } else if (keycode == ALLEGRO_KEY_A) {
-                                        if (x > 0)
-                                                x--;
-                                } else if (keycode == ALLEGRO_KEY_D) {
-                                        if (x < CHUNK_WIDTH)
-                                                x++;
-                                }
+                if (event.type == ALLEGRO_EVENT_DISPLAY_RESIZE) {
 
-                        } else if (event.type == ALLEGRO_EVENT_DISPLAY_RESIZE) {
+                        al_acknowledge_resize(screen);
+                        width = al_get_display_width(screen);
+                        height = al_get_display_height(screen);
+                        tiwi = width / scale;
+                        tihi = height / scale;
 
-                                al_acknowledge_resize(screen);
-                                width = al_get_display_width(screen);
-                                height = al_get_display_height(screen);
-                                tiwi = width / scale;
-                                tihi = height / scale;
+                } else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
 
-                        } else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+                        running = 0;
 
-                                running = 0;
-
-                        }
                 }
 
         } while (running);
