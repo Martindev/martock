@@ -17,7 +17,7 @@ enum {
 enum {
         BLOCK_COUNT = 6, /* Quantity of blocks. */
         BLOCK_SIZE = 60, /* Sprite resolution. */
-        BLOCK_SCALE = 3, /* Render scale. */
+        BLOCK_SCALE = 1, /* Render scale. */
 };
 
 /* Visibilities. */
