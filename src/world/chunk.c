@@ -41,6 +41,8 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
         if (!(ch = calloc(1, sizeof(chunk))))
                 return NULL;
 
+        ch->rules = rules;
+
         /* Set the defaults for each vertical level. */
         for (int i = 0; i < CHUNK_WIDTH; i++)
                 for (int j = 0; j < CHUNK_SOIL; j++)
