@@ -33,15 +33,16 @@ enum {
 enum {
         CHUNK_BORDER         = 3,
         CHUNK_HILL           = 50,
-        CHUNK_SMOOTH_RADIUS  = 20,
+        CHUNK_SMOOTH_RADIUS  = 30,
         CHUNK_CAVE_SEED      = 40,
         CHUNK_CAVE_RULE      = 4
 };
 
 typedef struct chunk {
         u16 position;
-        block grid[CHUNK_WIDTH][CHUNK_HEIGHT];
-        block bgrid[CHUNK_WIDTH][CHUNK_HEIGHT];
+        u8 heights[CHUNK_WIDTH];
+        block fore[CHUNK_WIDTH][CHUNK_HEIGHT];
+        block back[CHUNK_WIDTH][CHUNK_HEIGHT];
 } chunk;
 
 /* Load a chunk from file. */
