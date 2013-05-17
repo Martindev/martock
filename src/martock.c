@@ -8,7 +8,8 @@ int main (int argc, char **argv)
         init();
         block_init(NULL);
 
-        chunk *ch = chunk_generate(CHUNK_FULL, NULL, 0);
+        chunk *ch = world_gen(5, CHUNK_FULL);
+        fprintf(stderr, "GENNED\n");
         chunk_view(ch);
         free(ch);
 

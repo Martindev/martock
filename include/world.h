@@ -9,4 +9,7 @@ chunk *world_gen (u16 size, u8 rules);
 /* Shift the chunks currently in memory to accomodate viewer or player moves. */
 chunk *world_shift (chunk *ch, u8 side);
 
+/* Find the outermost loaded chunk on the given world on the given side. */
+chunk *world_edge (chunk *ch, u8 side);
+
 #endif /* WORLD_H */

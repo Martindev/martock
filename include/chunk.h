@@ -3,7 +3,7 @@
 
 /* Chunk dimensions. */
 enum {
-        CHUNK_WIDTH  = 500,
+        CHUNK_WIDTH  = 80,
         CHUNK_HEIGHT = 500
 };
 
@@ -60,6 +60,10 @@ chunk *chunk_load (u16 pos);
 
 /* Generate a new chunk based on neighbors. */
 chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side);
+
+/* Fetch a neighbor. */
+chunk *chunk_left (chunk *ch, int d);
+chunk *chunk_right (chunk *ch, int d);
 
 /* Interactively view the chunk. */
 void chunk_view (chunk *ch);

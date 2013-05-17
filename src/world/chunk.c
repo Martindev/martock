@@ -26,34 +26,25 @@ chunk *chunk_request (chunk *neighbor, u8 side, u8 rules)
         } else
                 return NULL;
 
-        if (!(ch = chunk_load(pos)))
-                return NULL;
-        else {
-                return ch;
-        }
+        ch = chunk_load(pos);
 
-        /* chunk_generate uses "side" to describe the neighbor's position
-           relative to the chunk it generates, where request is relative
-           to the neighbor, so they must be switched.                     */
-        if (side == CHUNK_LEFT)
-                side = CHUNK_RIGHT;
-        else
-                side = CHUNK_LEFT;
-
-        ch = chunk_generate(rules, neighbor, side);
-
+        if (!ch)
+                /* chunk_generate uses "side" to describe the neighbor's position
+                relative to the chunk it generates, where request is relative
+                to the neighbor, so they must be switched.                     */
+                ch = chunk_generate(rules, neighbor, (side == CHUNK_LEFT) ?
+                                                  CHUNK_RIGHT : CHUNK_LEFT);
+        
         /* Put the chunk in the world. */
-        pos = neighbor->position;
+        ch->position = pos;
         if (side == CHUNK_LEFT) {
-                ch->position = pos - 1;
                 ch->right = neighbor;
                 ch->right->left = ch;
         } else if (side == CHUNK_RIGHT) {
-                ch->position = pos - 1;
                 ch->left = neighbor;
                 ch->left->right = ch;
         }
-        
+
         return ch;
 }
 
@@ -123,21 +114,28 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
                 ch->heights[i] = rand() % CHUNK_HILL;
         for (int i = 0; i < CHUNK_WIDTH; i++) {
                 int average = ch->heights[i];
+                int count = 0;
                 for (int j = 1; j < CHUNK_SMOOTH_RADIUS; j++) {
-                        if (i - j >= 0)
+                        if (i - j >= 0) {
                                 average += ch->heights[i - j];
-                        else if (neighbor && (side == CHUNK_LEFT))
+                                count++;
+                        } else if (neighbor && (side == CHUNK_LEFT)) {
                                 average += neighbor->heights[CHUNK_WIDTH -
                                                              abs(i - j)];
+                                count++;
+                        }
 
-                        if (i + j < CHUNK_WIDTH)
+                        if (i + j < CHUNK_WIDTH) {
                                 average += ch->heights[i + j];
-                        else if (neighbor && (side == CHUNK_RIGHT))
+                                count++;
+                        } else if (neighbor && (side == CHUNK_RIGHT)) {
                                 average += neighbor->heights[(i + j) %
                                                              CHUNK_WIDTH];
+                                count++;
+                        }
                 }
 
-                average /= (CHUNK_SMOOTH_RADIUS * 2) + 1;
+                average /= count;
                 ch->heights[i] = average;
 
                 ch->fore[i][CHUNK_SOIL - ch->heights[i]].id = BLOCK_GRASS;
@@ -200,14 +198,54 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
 }
 
 /**
+ *  Fetch a chunk's neighbor by sifting through links.
+ *
+ *  @ch: chunk to start from
+ *  @d: displacement from start
+ *
+ *  @return: chunk d spaces from starter chunk
+ */
+chunk *chunk_left (chunk *ch, int d)
+{
+        if (!ch)
+                return NULL;
+
+        int i = 0;
+        chunk *it = ch;
+
+        while (it->left && (i < d)) {
+                it = it->left;
+                i++;
+        }
+
+        return it;
+}
+
+chunk *chunk_right (chunk *ch, int d)
+{
+        if (!ch)
+                return NULL;
+
+        int i = 0;
+        chunk *it = ch;
+
+        while (it->right && (i < d)) {
+                it = it->right;
+                i++;
+        }
+
+        return it;
+}
+
+/**
  *  Allow real-time browsing of the chunk, illustrated graphically.
  *
  *  @ch: chunk to view
  */
 void chunk_view (chunk *ch)
 {
-        int x = 175;
-        int y = 175;
+        int x = 0;
+        int y = 80;
 
         int height = 640;
         int width = 800;
@@ -217,6 +255,10 @@ void chunk_view (chunk *ch)
 
         int tiwi = width / scale;
         int tihi = height / scale;
+
+        chunk *left, *right;
+
+        int world_width = CHUNK_WIDTH * CHUNK_RENDER_DISTANCE;
 
         ALLEGRO_EVENT event;
         ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
@@ -235,15 +277,25 @@ void chunk_view (chunk *ch)
 
                 for (int i = x; i < x + tiwi; i++)
                         for (int j = y; j < y + tihi; j++) {
-                                if ((i >= 0) && i < CHUNK_WIDTH) {
+                                int disp = 0;
+                                if (i >= 0)
+                                        disp = (i % CHUNK_WIDTH) ?
+                                                i / CHUNK_WIDTH + 1 :
+                                                i / CHUNK_WIDTH;
+                                else
+                                        disp = (abs(i) % CHUNK_WIDTH) ?
+                                                abs(i) / CHUNK_WIDTH + 1 :
+                                                abs(i) / CHUNK_WIDTH;
+
+                                if ((i >= 0) && (i < CHUNK_WIDTH)) {
                                         fg = ch->fore[i][j];
                                         bg = ch->back[i][j];
-                                } else if ((i < 0) && ch->left) {
-                                        fg = ch->left->fore[CHUNK_WIDTH -
-                                                            abs(i)][j];
-                                        bg = ch->left->back[CHUNK_WIDTH -
-                                                            abs(i)][j];
-                                } else if ((i > CHUNK_WIDTH) && ch->right) {
+                                } else if ((i < 0) &&
+                                          (left = chunk_left(ch, disp))) {
+                                        fg = left->fore[CHUNK_WIDTH -abs(i)][j];
+                                        bg = left->back[CHUNK_WIDTH -abs(i)][j];
+                                } else if ((i >= CHUNK_WIDTH) &&
+                                          (right = chunk_right(ch, disp))) {
                                         fg = ch->left->fore[i % CHUNK_WIDTH][j];
                                         bg = ch->left->back[i % CHUNK_WIDTH][j];
                                 }
@@ -274,11 +326,21 @@ void chunk_view (chunk *ch)
                                         if (y < CHUNK_HEIGHT)
                                                 y++;
                                 } else if (keycode == ALLEGRO_KEY_A) {
-                                        if (x > 0)
+                                        if (x > 0 - (world_width))
                                                 x--;
+                                        else {
+                                                ch = world_shift(ch,
+                                                                 CHUNK_LEFT);
+                                                x += CHUNK_WIDTH;
+                                        }
                                 } else if (keycode == ALLEGRO_KEY_D) {
-                                        if (x < CHUNK_WIDTH)
+                                        if (x < world_width)
                                                 x++;
+                                        else {
+                                                ch = world_shift(ch,
+                                                                 CHUNK_RIGHT);
+                                                x -= CHUNK_WIDTH;
+                                        }
                                 }
 
                         } else if (event.type == ALLEGRO_EVENT_DISPLAY_RESIZE) {

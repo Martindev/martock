@@ -16,5 +16,6 @@
 #include "util.h"
 #include "block.h"
 #include "chunk.h"
+#include "world.h"
 
 #endif /* MARTOCK_H */
