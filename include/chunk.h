@@ -41,8 +41,8 @@ enum {
 typedef struct chunk {
         u8 rules;
         u16 position;
-        chunk *right;
-        chunk *left;
+        struct chunk *right;
+        struct chunk *left;
         u8 heights[CHUNK_WIDTH];
         block fore[CHUNK_WIDTH][CHUNK_HEIGHT];
         block back[CHUNK_WIDTH][CHUNK_HEIGHT];
