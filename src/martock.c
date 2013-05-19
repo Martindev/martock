@@ -8,10 +8,10 @@ int main (int argc, char **argv)
         init();
         block_init(NULL);
 
-        chunk *ch = chunk_generate(CHUNK_FULL, NULL, 0);
-        chunk_view(ch);
-        free(ch);
-
+        fprintf(stderr, "Looper.\n");
+        world_view();
+        fprintf(stderr, "Looper.\n");
+        
         blocks_deinit();
 
         return 0;
