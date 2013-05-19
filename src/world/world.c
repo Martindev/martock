@@ -271,9 +271,7 @@ void world_view ()
 
         al_destroy_display(screen);
         al_destroy_event_queue(queue);
-        fprintf(stderr, "CLOSING");
         world_close(ch);
-        fprintf(stderr, "CLOSING");
         block_deinit();
 
 }
