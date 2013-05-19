@@ -182,7 +182,7 @@ u8 block_weight (u16 id)
 /**
 * Deallocate all resources used by the block sprites.
 */
-void blocks_deinit ()
+void block_deinit ()
 {
         if (sheet)
                 al_destroy_bitmap(sheet);

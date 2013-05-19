@@ -56,6 +56,6 @@ u8 block_gravity (u16 id);
 u8 block_weight (u16 id);
 
 /* Free the block module's memory. */
-void blocks_deinit ();
+void block_deinit ();
 
 #endif /* BLOCK_H */

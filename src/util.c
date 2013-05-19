@@ -18,6 +18,9 @@ int init ()
         al_init_font_addon();
         al_init_ttf_addon();
 
+        al_set_new_display_flags(ALLEGRO_OPENGL);
+        al_set_new_bitmap_flags(ALLEGRO_VIDEO_BITMAP);
+
         if (enet_initialize())
                 return 2;
 
