@@ -104,6 +104,16 @@ int block_init (const char *tex)
 */
 void block_draw (block fg, block bg, int x, int y, int scale)
 {
+        if ((fg.id < 0) || (fg.id >= BLOCK_COUNT)) {
+                fprintf(stderr, "Foreground err: %d", fg.id);
+                return;
+        }
+
+        if ((bg.id < 0) || (bg.id >= BLOCK_COUNT)) {
+                fprintf(stderr, "Background err: %d", bg.id);
+                return;
+        }
+
         if ((profiles[fg.id].opacity < BLOCK_OPAQUE) && bg.id) {
                 al_draw_scaled_bitmap(backs[bg.id], 0, 0, BLOCK_SIZE,
                                       BLOCK_SIZE, x, y, scale, scale, 0);
