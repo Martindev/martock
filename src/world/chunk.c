@@ -262,25 +262,39 @@ void chunk_save_img (chunk *ch)
         int width = scale * CHUNK_WIDTH;
         int height = scale * CHUNK_HEIGHT;
 
+        ALLEGRO_DISPLAY *screen = al_create_display(500, 300);
         ALLEGRO_BITMAP *canvas = al_create_bitmap(width, height);
+        ALLEGRO_FONT *font = al_load_ttf_font("assets/font.ttf", 20, 0);
 
-        if (!canvas)
+        block fg, bg;
+
+        block_init(NULL);
+
+        al_draw_text(font, al_map_rgb(255, 255, 255), 10, 10, 0,
+                      "Rendering chunk to image.");
+
+        al_flip_display();
+
+        if (!canvas) {
+                fprintf(stderr, "Canvas failure.\n");
                 return;
+        }
 
         al_set_target_bitmap(canvas);
 
         for (int i = 0; i < CHUNK_WIDTH; i++)
                 for (int j = 0; j < CHUNK_HEIGHT; j++) {
-                        al_draw_scaled_bitmap(block_sprite(ch->fore[i][j].id),
-                                              0, 0, BLOCK_SIZE, BLOCK_SIZE,
-                                              i * scale, j * scale,
-                                              scale, scale, 0);
+                                fg = ch->fore[i][j];
+                                bg = ch->back[i][j];
+                                block_draw(fg, bg, i * scale, j * scale, scale);
                 }
 
         char temp[100] = {0};
         sprintf(temp, "world/chunks/%d.png", ch->position);
         al_save_bitmap(temp, canvas);
         al_destroy_bitmap(canvas);
+        al_destroy_display(screen);
+        block_deinit();
 }
 
 /**
