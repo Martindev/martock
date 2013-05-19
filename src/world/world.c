@@ -156,7 +156,7 @@ chunk *world_shift (chunk *ch, u8 side)
         }
 
         clock_t end = clock();
-        printf ("Shifted in %.3fs\n", ((double)cend - (double)cstart)* 1.0e-6);
+        printf ("Shifted in %.3fs\n", ((double)end - (double)start)* 1.0e-6);
 
         return shift;
 }
