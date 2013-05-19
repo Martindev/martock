@@ -121,21 +121,17 @@ chunk *world_shift (chunk *ch, u8 side)
 {
         chunk *drop, *new, *edge, *shift;
 
-        fprintf(stderr, "Shifting.\n");
+        clock_t start = clock();
 
         if (!ch)
                 shift = NULL;
         else if (side == CHUNK_RIGHT) {
-                fprintf(stderr, "RIGHT EDGE 0\n");
                 drop = world_edge(ch, CHUNK_LEFT);
-                fprintf(stderr, "RIGHT EDGE 1\n");
                 drop->right->left = NULL;
                 chunk_close(drop);
 
                 edge = world_edge(ch, CHUNK_RIGHT);
-                fprintf(stderr, "RIGHT EDGE 2\n");
                 new = chunk_load(edge->position + 1);
-                fprintf(stderr, "RIGHT EDGE 3\n");
                 if (!new)
                         new = chunk_generate(ch->rules, edge, CHUNK_LEFT);
                 new->position = edge->position + 1;
@@ -143,16 +139,12 @@ chunk *world_shift (chunk *ch, u8 side)
                 edge->right = new;
                 shift = ch->right;
         } else if (side == CHUNK_LEFT) {
-                fprintf(stderr, "LEFT EDGE 0\n");
                 drop = world_edge(ch, CHUNK_RIGHT);
-                fprintf(stderr, "LEFT EDGE 1\n");
                 drop->left->right = NULL;
                 chunk_close(drop);
 
-                fprintf(stderr, "LEFT EDGE 2\n");
                 edge = world_edge(ch, CHUNK_LEFT);
                 new = chunk_load(edge->position - 1);
-                fprintf(stderr, "LEFT EDGE 3\n");
                 if (!new)
                         new = chunk_generate(ch->rules, edge, CHUNK_RIGHT);
                 new->position = edge->position - 1;
@@ -162,6 +154,9 @@ chunk *world_shift (chunk *ch, u8 side)
         } else {
                 shift = NULL;
         }
+
+        clock_t end = clock();
+        printf ("Shifted in %.3fs\n", ((double)cend - (double)cstart)* 1.0e-6);
 
         return shift;
 }
