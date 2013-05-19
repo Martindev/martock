@@ -180,6 +180,8 @@ void chunk_view (chunk *ch)
 
         block fg, bg;
 
+        block_init(NULL);
+
         al_register_event_source(queue,
                                  al_get_display_event_source(screen));
         al_register_event_source(queue,
@@ -242,6 +244,7 @@ void chunk_view (chunk *ch)
 
         al_destroy_display(screen);
         al_destroy_event_queue(queue);
+        block_deinit();
 }
 
 /**

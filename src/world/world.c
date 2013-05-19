@@ -188,6 +188,7 @@ void world_view ()
         ALLEGRO_KEYBOARD_STATE state;
 
         block fg, bg;
+        block_init(NULL);
 
         al_register_event_source(queue,
                                  al_get_display_event_source(screen));
@@ -273,5 +274,6 @@ void world_view ()
         fprintf(stderr, "CLOSING");
         world_close(ch);
         fprintf(stderr, "CLOSING");
+        block_deinit();
 
 }
