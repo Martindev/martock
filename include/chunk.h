@@ -25,8 +25,9 @@ enum {
 
 /* Relative positions. */
 enum {
-        CHUNK_RIGHT = 0,
-        CHUNK_LEFT  = 1
+        CHUNK_RIGHT           = 0,
+        CHUNK_LEFT            = 1,
+        CHUNK_RENDER_DISTANCE = 5
 };
 
 /* Cellular automata modes. */
@@ -40,7 +41,7 @@ enum {
 
 typedef struct chunk {
         u8 rules;
-        u16 position;
+        int position;
         struct chunk *right;
         struct chunk *left;
         u8 heights[CHUNK_WIDTH];
@@ -49,7 +50,7 @@ typedef struct chunk {
 } chunk;
 
 /* Load a chunk from file. */
-chunk *chunk_load (u16 pos);
+chunk *chunk_load (int pos);
 
 /* Generate a new chunk based on neighbors. */
 chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side);

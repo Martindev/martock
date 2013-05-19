@@ -7,7 +7,7 @@
  *
  *  @return: the loaded chunk; NULL on failure
  */
-chunk *chunk_load (u16 pos)
+chunk *chunk_load (int pos)
 {
         chunk *ch = NULL;
         FILE *file = NULL;
@@ -322,6 +322,8 @@ void chunk_close (chunk *ch)
         if (!ch)
                 return;
 
+        ch->left = NULL;
+        ch->right = NULL;
         FILE *file = vfopen("wb", "world/chunks/%d.ch", ch->position);
 
         if (file)
