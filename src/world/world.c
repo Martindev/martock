@@ -231,20 +231,28 @@ void world_view ()
 
                 if (al_key_down(&state, ALLEGRO_KEY_ESCAPE)) {
                         running = 0;
-                } else if (al_key_down(&state, ALLEGRO_KEY_W)) {
+                }
+                
+                if (al_key_down(&state, ALLEGRO_KEY_W)) {
                         if (y > 0)
                                 y--;
-                } else if (al_key_down(&state, ALLEGRO_KEY_S)) {
+                } 
+                
+                if (al_key_down(&state, ALLEGRO_KEY_S)) {
                         if (y < CHUNK_HEIGHT)
                                 y++;
-                } else if (al_key_down(&state, ALLEGRO_KEY_A)) {
+                } 
+                
+                if (al_key_down(&state, ALLEGRO_KEY_A)) {
                         if (x > 0)
                                 x--;
                         else {
                                 ch = world_shift(ch, CHUNK_LEFT);
                                 x += CHUNK_WIDTH;
                         }
-                } else if (al_key_down(&state, ALLEGRO_KEY_D)) {
+                } 
+                
+                if (al_key_down(&state, ALLEGRO_KEY_D)) {
                         if (x < CHUNK_WIDTH - tiwi)
                                 x++;
                         else {
