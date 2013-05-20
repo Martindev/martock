@@ -5,17 +5,20 @@
 
 /* Block id's. */
 enum {
-        BLOCK_SKY = 0,
-        BLOCK_GRASS = 1,
-        BLOCK_SOIL = 2,
-        BLOCK_STONE = 3,
-        BLOCK_SAND = 4,
-        BLOCK_WATER = 5
+        BLOCK_SKY     = 0,
+        BLOCK_GRASS   = 1,
+        BLOCK_SOIL    = 2,
+        BLOCK_STONE   = 3,
+        BLOCK_IRON    = 4,
+        BLOCK_MITHRIL = 5,
+        BLOCK_DIAMOND = 6,
+        BLOCK_TRUNK   = 7,
+        BLOCK_LEAVES  = 8
 };
 
 /* Block metadata. */
 enum {
-        BLOCK_COUNT = 6, /* Quantity of blocks. */
+        BLOCK_COUNT = 9, /* Quantity of blocks. */
         BLOCK_SIZE = 60, /* Sprite resolution. */
         BLOCK_SCALE = 1, /* Render scale. */
 };

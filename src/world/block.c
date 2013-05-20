@@ -11,32 +11,47 @@ static void init_profiles ()
         profiles[BLOCK_SKY].opacity = 0;
         profiles[BLOCK_SKY].density = 0;
         profiles[BLOCK_SKY].gravity = 0;
-        profiles[BLOCK_SKY].weight = 0;
+        profiles[BLOCK_SKY].weight  = 0;
 
         profiles[BLOCK_GRASS].opacity = 255;
         profiles[BLOCK_GRASS].density = 10;
         profiles[BLOCK_GRASS].gravity = 0;
-        profiles[BLOCK_GRASS].weight = 10;
+        profiles[BLOCK_GRASS].weight  = 10;
 
         profiles[BLOCK_SOIL].opacity = 255;
         profiles[BLOCK_SOIL].density = 10;
         profiles[BLOCK_SOIL].gravity = 0;
-        profiles[BLOCK_SOIL].weight = 15;
+        profiles[BLOCK_SOIL].weight  = 15;
 
         profiles[BLOCK_STONE].opacity = 255;
         profiles[BLOCK_STONE].density = 30;
         profiles[BLOCK_STONE].gravity = 0;
-        profiles[BLOCK_STONE].weight = 40;
+        profiles[BLOCK_STONE].weight  = 40;
 
-        profiles[BLOCK_SAND].opacity = 255;
-        profiles[BLOCK_SAND].density = 3;
-        profiles[BLOCK_SAND].gravity = 0;
-        profiles[BLOCK_SAND].weight = 30;
+        profiles[BLOCK_IRON].opacity = 255;
+        profiles[BLOCK_IRON].density = 35;
+        profiles[BLOCK_IRON].gravity = 0;
+        profiles[BLOCK_IRON].weight  = 50;
 
-        profiles[BLOCK_WATER].opacity = 150;
-        profiles[BLOCK_WATER].density = 0;
-        profiles[BLOCK_WATER].gravity = 30;
-        profiles[BLOCK_WATER].weight = 20;
+        profiles[BLOCK_MITHRIL].opacity = 255;
+        profiles[BLOCK_MITHRIL].density = 40;
+        profiles[BLOCK_MITHRIL].gravity = 0;
+        profiles[BLOCK_MITHRIL].weight  = 60;
+
+        profiles[BLOCK_DIAMOND].opacity = 255;
+        profiles[BLOCK_DIAMOND].density = 50;
+        profiles[BLOCK_DIAMOND].gravity = 0;
+        profiles[BLOCK_DIAMOND].weight  = 30;
+
+        profiles[BLOCK_TRUNK].opacity = 255;
+        profiles[BLOCK_TRUNK].density = 0;
+        profiles[BLOCK_TRUNK].gravity = 0;
+        profiles[BLOCK_TRUNK].weight  = 20;
+
+        profiles[BLOCK_LEAVES].opacity = 200;
+        profiles[BLOCK_LEAVES].density = 10;
+        profiles[BLOCK_LEAVES].gravity = 0;
+        profiles[BLOCK_LEAVES].weight  = 20;
 }
 
 /**
