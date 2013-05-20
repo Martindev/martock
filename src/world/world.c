@@ -239,7 +239,7 @@ void world_view ()
                 } 
                 
                 if (al_key_down(&state, ALLEGRO_KEY_S)) {
-                        if (y < CHUNK_HEIGHT)
+                        if (y < CHUNK_HEIGHT - tihi)
                                 y++;
                 } 
                 
