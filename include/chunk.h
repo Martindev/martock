@@ -33,8 +33,8 @@ enum {
 /* Cellular automata modes. */
 enum {
         CHUNK_BORDER         = 3,
-        CHUNK_HILL           = CHUNK_HEIGHT / 10,
-        CHUNK_SMOOTH_RADIUS  = CHUNK_WIDTH / 10,
+        CHUNK_HILL           = CHUNK_HEIGHT / 5,
+        CHUNK_SMOOTH_RADIUS  = CHUNK_WIDTH / 8,
         CHUNK_CAVE_SEED      = 40,
         CHUNK_CAVE_RULE      = 4
 };
