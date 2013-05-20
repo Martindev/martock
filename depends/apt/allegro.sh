@@ -9,6 +9,6 @@ sudo apt-get install -y cmake g++ freeglut3-dev libxcursor-dev libpng12-dev \
                         libflac-dev libdumb1-dev libvorbis-dev libphysfs-dev
 mkdir build
 cd build
-cmake ..
+cmake -DSHARED=off ..
 make
 sudo make install
