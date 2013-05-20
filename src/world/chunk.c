@@ -1,5 +1,137 @@
 #include <martock.h>
 
+/*******************************************************************************
+ *  Private world generation functions.
+ ******************************************************************************/
+
+/* Set the defaults for each vertical level. */
+static void chunk_gen_flat (chunk *ch)
+{
+        for (int i = 0; i < CHUNK_WIDTH; i++)
+                for (int j = 0; j < CHUNK_SOIL; j++)
+                        ch->fore[i][j].id = BLOCK_SKY;
+
+        for (int i = 0; i < CHUNK_WIDTH; i++)
+                for (int j = CHUNK_SOIL; j < CHUNK_MANTLE; j++)
+                        ch->fore[i][j].id = BLOCK_SOIL;
+
+        for (int i = 0; i < CHUNK_WIDTH; i++)
+                for (int j = CHUNK_MANTLE; j < CHUNK_HEIGHT; j++)
+                        ch->fore[i][j].id = BLOCK_STONE;
+}
+
+/* Top-level terrain variation. */
+static void chunk_gen_terrain (chunk *ch, const chunk *neighbor, u8 side)
+{
+        memset(ch->heights, CHUNK_HILL / 2, CHUNK_WIDTH);
+        for (int i = 0; i < CHUNK_WIDTH; i++)
+                ch->heights[i] = rand() % CHUNK_HILL;
+        for (int i = 0; i < CHUNK_WIDTH; i++) {
+                int average = ch->heights[i];
+                int count = 0;
+                for (int j = 1; j < CHUNK_SMOOTH_RADIUS; j++) {
+                        if (i - j >= 0) {
+                                average += ch->heights[i - j];
+                                count++;
+                        } else if (neighbor && (side == CHUNK_LEFT)) {
+                                average += neighbor->heights[CHUNK_WIDTH -
+                                                             abs(i - j)];
+                                count++;
+                        }
+
+                        if (i + j < CHUNK_WIDTH) {
+                                average += ch->heights[i + j];
+                                count++;
+                        } else if (neighbor && (side == CHUNK_RIGHT)) {
+                                average += neighbor->heights[(i + j) %
+                                                             CHUNK_WIDTH];
+                                count++;
+                        }
+                }
+
+                average = (average % count) ?
+                          (average / count) + 1 :
+                          (average / count);
+
+                ch->heights[i] = average;
+
+                ch->fore[i][CHUNK_SOIL - ch->heights[i]].id = BLOCK_GRASS;
+                for (int j = CHUNK_SOIL - ch->heights[i] + 1; j < CHUNK_SOIL; j++)
+                        ch->fore[i][j].id = BLOCK_SOIL;
+        }
+}
+
+/* Ease transition from the surface to the mantle. */
+static void chunk_gen_gradient (chunk *ch)
+{
+        double total = CHUNK_MANTLE - CHUNK_SOIL;
+        for (int i = 0; i < CHUNK_WIDTH; i++)
+                for (int j = CHUNK_SOIL + 1; j < CHUNK_MANTLE; j++) {
+                        int prop = ((j - CHUNK_SOIL) / total) * 100;
+                        if ((abs(rand()) % 100) < prop)
+                                ch->fore[i][j].id = BLOCK_STONE;
+                }
+}
+
+/* Create caves in the mantle. */
+static void chunk_gen_caves (chunk *ch)
+{
+        /* Initial seeding. */
+        double ytotal = CHUNK_CORE - CHUNK_MANTLE;
+        double xtotal = CHUNK_WIDTH - CHUNK_BORDER;
+        for (int i = CHUNK_BORDER; i < CHUNK_WIDTH - CHUNK_BORDER; i++)
+                for (int j = CHUNK_MANTLE; j < CHUNK_CORE; j++) {
+                        int yprop = ((j - CHUNK_MANTLE) / ytotal) * 100;
+                        int xprop = ((i - CHUNK_BORDER) / xtotal) * 100;
+                        yprop = (yprop > 50) ? 100 - yprop : yprop;
+                        xprop = (xprop > 50) ? 100 - xprop : xprop;
+                        if ((abs(rand()) % 100) < ((xprop + yprop) / 2))
+                                ch->fore[i][j].id = BLOCK_SKY;
+                }
+
+        /* Cave automata. */
+        chunk cmp;
+        memcpy(&cmp, ch, sizeof(chunk));
+        for (int i = CHUNK_BORDER; i < CHUNK_WIDTH - CHUNK_BORDER; i++)
+                for (int j = CHUNK_MANTLE; j < CHUNK_CORE; j++) {
+                        int t = 0;
+
+                        t = (cmp.fore[i - 1][j - 1].id) ? (t + 1) : t;
+                        t = (cmp.fore[i - 1][j    ].id) ? (t + 1) : t;
+                        t = (cmp.fore[i - 1][j + 1].id) ? (t + 1) : t;
+
+                        t = (cmp.fore[i    ][j - 1].id) ? (t + 1) : t;
+                        t = (cmp.fore[i    ][j + 1].id) ? (t + 1) : t;
+
+                        t = (cmp.fore[i + 1][j - 1].id) ? (t + 1) : t;
+                        t = (cmp.fore[i + 1][j    ].id) ? (t + 1) : t;
+                        t = (cmp.fore[i + 1][j + 1].id) ? (t + 1) : t;
+
+                        if (ch->fore[i][j].id) {
+                                if ((t < 3) || (t > 8))
+                                        ch->fore[i][j].id = BLOCK_SKY;
+                        } else
+                                if ((t > 5) && (t < 9))
+                                        ch->fore[i][j].id = BLOCK_STONE;
+                }
+
+}
+
+/* Plant ore in the chunk. */
+static void chunk_gen_ore (chunk *ch)
+{
+        for (int i = 0; i < CHUNK_WIDTH; i++)
+                for (int j = CHUNK_MANTLE; j < CHUNK_HEIGHT; j++) {
+                        if ((abs(rand()) % 10000) < BLOCK_IRON_ODD)
+                                ch->fore[i][j].id = BLOCK_IRON;
+                        else if ((abs(rand()) % 10000) < BLOCK_MITHRIL_ODD)
+                                ch->fore[i][j].id = BLOCK_MITHRIL;
+                        else if (((abs(rand()) % 10000) < BLOCK_DIAMOND_ODD) &&
+                                 (j > CHUNK_CORE))
+                                ch->fore[i][j].id = BLOCK_DIAMOND;
+                }
+}
+
 /**
  *  Load a chunk from file if it exists.
  *
@@ -43,123 +175,20 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
 
         ch->rules = rules;
 
-        /* Set the defaults for each vertical level. */
-        for (int i = 0; i < CHUNK_WIDTH; i++)
-                for (int j = 0; j < CHUNK_SOIL; j++)
-                        ch->fore[i][j].id = BLOCK_SKY;
-
-        for (int i = 0; i < CHUNK_WIDTH; i++)
-                for (int j = CHUNK_SOIL; j < CHUNK_MANTLE; j++)
-                        ch->fore[i][j].id = BLOCK_SOIL;
-
-        for (int i = 0; i < CHUNK_WIDTH; i++)
-                for (int j = CHUNK_MANTLE; j < CHUNK_HEIGHT; j++)
-                        ch->fore[i][j].id = BLOCK_STONE;
+        chunk_gen_flat(ch);
 
         /* If a flat chunk was requested, it's done. */
         if (rules & CHUNK_FLAT)
                 return ch;
 
-        /* Varying terrain (hills, valleys, mountains, etc.) */
-        memset(ch->heights, CHUNK_HILL / 2, CHUNK_WIDTH);
-        for (int i = 0; i < CHUNK_WIDTH; i++)
-                ch->heights[i] = rand() % CHUNK_HILL;
-        for (int i = 0; i < CHUNK_WIDTH; i++) {
-                int average = ch->heights[i];
-                int count = 0;
-                for (int j = 1; j < CHUNK_SMOOTH_RADIUS; j++) {
-                        if (i - j >= 0) {
-                                average += ch->heights[i - j];
-                                count++;
-                        } else if (neighbor && (side == CHUNK_LEFT)) {
-                                average += neighbor->heights[CHUNK_WIDTH -
-                                                             abs(i - j)];
-                                count++;
-                        }
-
-                        if (i + j < CHUNK_WIDTH) {
-                                average += ch->heights[i + j];
-                                count++;
-                        } else if (neighbor && (side == CHUNK_RIGHT)) {
-                                average += neighbor->heights[(i + j) %
-                                                             CHUNK_WIDTH];
-                                count++;
-                        }
-                }
-
-                average = (average % count) ?
-                          (average / count) + 1 :
-                          (average / count);
-
-                ch->heights[i] = average;
-
-                ch->fore[i][CHUNK_SOIL - ch->heights[i]].id = BLOCK_GRASS;
-                for (int j = CHUNK_SOIL - ch->heights[i] + 1; j < CHUNK_SOIL; j++)
-                        ch->fore[i][j].id = BLOCK_SOIL;
-        }
-
-        /* Gradient stone. */
-        double total = CHUNK_MANTLE - CHUNK_SOIL;
-        for (int i = 0; i < CHUNK_WIDTH; i++)
-                for (int j = CHUNK_SOIL + 1; j < CHUNK_MANTLE; j++) {
-                        int prop = ((j - CHUNK_SOIL) / total) * 100;
-                        if ((rand() % 100) < prop)
-                                ch->fore[i][j].id = BLOCK_STONE;
-                }
+        chunk_gen_terrain(ch, neighbor, side);
+        chunk_gen_gradient(ch);
 
         /* Solid background layer. */
         memcpy(ch->back, ch->fore, sizeof(block) * CHUNK_WIDTH * CHUNK_HEIGHT);
 
-        /* Ore placement. */
-        for (int i = 0; i < CHUNK_WIDTH; i++)
-                for (int j = CHUNK_MANTLE; j < CHUNK_HEIGHT; j++) {
-                        if ((abs(rand()) % 10000) < BLOCK_IRON_ODD)
-                                ch->fore[i][j].id = BLOCK_IRON;
-                        else if ((abs(rand()) % 10000) < BLOCK_MITHRIL_ODD)
-                                ch->fore[i][j].id = BLOCK_MITHRIL;
-                        else if (((abs(rand()) % 10000) < BLOCK_DIAMOND_ODD) &&
-                                 (j > CHUNK_CORE))
-                                ch->fore[i][j].id = BLOCK_DIAMOND;
-                }
-
-        /* Initial seeding. */
-        double ytotal = CHUNK_CORE - CHUNK_MANTLE;
-        double xtotal = CHUNK_WIDTH - CHUNK_BORDER;
-        for (int i = CHUNK_BORDER; i < CHUNK_WIDTH - CHUNK_BORDER; i++)
-                for (int j = CHUNK_MANTLE; j < CHUNK_CORE; j++) {
-                        int yprop = ((j - CHUNK_MANTLE) / ytotal) * 100;
-                        int xprop = ((i - CHUNK_BORDER) / xtotal) * 100;
-                        yprop = (yprop > 50) ? 100 - yprop : yprop;
-                        xprop = (xprop > 50) ? 100 - xprop : xprop;
-                        if ((rand() % 100) < ((xprop + yprop) / 2))
-                                ch->fore[i][j].id = BLOCK_SKY;
-                }
-
-        /* Cave automata. */
-        chunk cmp;
-        memcpy(&cmp, ch, sizeof(chunk));
-        for (int i = CHUNK_BORDER; i < CHUNK_WIDTH - CHUNK_BORDER; i++)
-                for (int j = CHUNK_MANTLE; j < CHUNK_CORE; j++) {
-                        int t = 0;
-
-                        t = (cmp.fore[i - 1][j - 1].id) ? (t + 1) : t;
-                        t = (cmp.fore[i - 1][j    ].id) ? (t + 1) : t;
-                        t = (cmp.fore[i - 1][j + 1].id) ? (t + 1) : t;
-
-                        t = (cmp.fore[i    ][j - 1].id) ? (t + 1) : t;
-                        t = (cmp.fore[i    ][j + 1].id) ? (t + 1) : t;
-
-                        t = (cmp.fore[i + 1][j - 1].id) ? (t + 1) : t;
-                        t = (cmp.fore[i + 1][j    ].id) ? (t + 1) : t;
-                        t = (cmp.fore[i + 1][j + 1].id) ? (t + 1) : t;
-
-                        if (ch->fore[i][j].id) {
-                                if ((t < 3) || (t > 8))
-                                        ch->fore[i][j].id = BLOCK_SKY;
-                        } else
-                                if ((t > 5) && (t < 9))
-                                        ch->fore[i][j].id = BLOCK_STONE;
-                }
+        chunk_gen_caves(ch);
+        chunk_gen_ore(ch);
 
         return ch;
 }
