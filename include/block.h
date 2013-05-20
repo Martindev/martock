@@ -16,6 +16,13 @@ enum {
         BLOCK_LEAVES  = 8
 };
 
+/* Frequency. */
+enum {
+        BLOCK_IRON_ODD    = 30,
+        BLOCK_MITHRIL_ODD = 20,
+        BLOCK_DIAMOND_ODD = 10
+};
+
 /* Block metadata. */
 enum {
         BLOCK_COUNT = 9, /* Quantity of blocks. */

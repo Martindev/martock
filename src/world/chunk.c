@@ -110,6 +110,18 @@ chunk *chunk_generate (u8 rules, const chunk *neighbor, u8 side)
         /* Solid background layer. */
         memcpy(ch->back, ch->fore, sizeof(block) * CHUNK_WIDTH * CHUNK_HEIGHT);
 
+        /* Ore placement. */
+        for (int i = 0; i < CHUNK_WIDTH; i++)
+                for (int j = CHUNK_MANTLE; j < CHUNK_HEIGHT; j++) {
+                        if ((abs(rand()) % 10000) < BLOCK_IRON_ODD)
+                                ch->fore[i][j].id = BLOCK_IRON;
+                        else if ((abs(rand()) % 10000) < BLOCK_MITHRIL_ODD)
+                                ch->fore[i][j].id = BLOCK_MITHRIL;
+                        else if (((abs(rand()) % 10000) < BLOCK_DIAMOND_ODD) &&
+                                 (j > CHUNK_CORE))
+                                ch->fore[i][j].id = BLOCK_DIAMOND;
+                }
+
         /* Initial seeding. */
         double ytotal = CHUNK_CORE - CHUNK_MANTLE;
         double xtotal = CHUNK_WIDTH - CHUNK_BORDER;
