@@ -5,8 +5,7 @@
  *  
  *  @return: 0 no errors
  *           1 Allegro failed
- *           2 ENet failed
- *           3 blocks failed
+ *           2 blocks failed
  */
 int init ()
 {
@@ -21,18 +20,11 @@ int init ()
         al_set_new_display_flags(ALLEGRO_OPENGL);
         al_set_new_bitmap_flags(ALLEGRO_VIDEO_BITMAP);
 
-        if (enet_initialize())
-                return 2;
-
-        atexit(enet_deinitialize);
-
         return 0;
 }
 
 /**
- *  This functions as a proxy for fopen, which conveniently allows those who
- *  call it to use a formatted string, without having to use sprintf and make
- *  an array for it every time the name includes a variable.
+ *  Open a file with its name.
  *
  *  @mode: the write mode to forward to fopen (e.g. "w", "r")
  *  @msg: the formatted string

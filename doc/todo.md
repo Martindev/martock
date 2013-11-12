@@ -13,19 +13,7 @@ worlds which appear contiguous.
 
 2. The map storing and loading algorithm must be highly configurable, taking
    arguments for the size of a block (for example, if we decide to make a struct
-   for it in the future and add/remove fields), and dimensions of the chunk. A
-   potential prototype is below.
-
-        struct Chunk {
-                int width;
-                int height;
-                int depth;
-                size_t block_size;
-                Block *grid[width][height][depth];
-        };
-    
-   So the size of a chunk file can be determined by width x height x depth x
-   block_size.
+   for it in the future and add/remove fields), and dimensions of the chunk.
 
 3. The functions for generating chunks, or chunk regions, must take other chunks
    as arguments to ensure the generated chunk matches the chunks next to it.
@@ -52,23 +40,6 @@ that new chunks generate to for it in real time).
 
 3. The graphical window must be resizeable, and doing so cannot adjust the
    position of the camera in any unnatural way.
-
-Server
---------------------------------------------------------------------------------
-The multiplayer functionality of Martock should be programmed into the local
-game as well, (where 127.0.0.1 will be treated as the server address). Local
-play will obviously not depend on a network, but the networking should be a mode
-of operation for the game, rather than an independent process.
-
-One client will act as the "host", and others can join the game with them. A
-"host" client can either just watch the log or be a camera, but not play (so it
-can be left on indefinitely if it's a dedicated server).
-
-This can be tested by browsing with two cameras and verifying that the changes
-of editing are mirrored. Theoretically the server would work by, upon a new
-client's connection, forwarding them the map to download, and then relaying
-everyone's input commands to each other as long as the session is open. This is
-only a theory however and needs verification.
 
 Interfaces
 --------------------------------------------------------------------------------

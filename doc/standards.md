@@ -1,50 +1,16 @@
 Martock: Standards
 ================================================================================
 
-Language
---------------------------------------------------------------------------------
-Martock will be developed in the C programming language, using the standards
-defined in ISO/IEC 9899:1999, known informally as "C99". When compiling with GCC
-include the flag **-std=c99** to parse it accurately.
-
 Environment
 --------------------------------------------------------------------------------
-Martock will be compiled using GCC or an appropriate port (e.g. MinGW on 
-Windows), version 4.7 or later.
-
-Mandatory flags for in-dev builds:
-
-    -Wall -g -ggdb
-
-IDE's can be used locally, but the repository should only depend on text files
-and build scripts (either configure/make files or shell scripts, whichever is
-appropriate at the time).
-
-Tools
---------------------------------------------------------------------------------
-Two libraries will be used in Martock: Allegro 5 and ENet. Allegro 5 for
-graphics, and ENet for networking.
-
-Valgrind will be used for checking memory management.
+The repository should only depend on text files and build scripts (either
+configure/make files or shell scripts, whichever is appropriate at the time).
+Don't commit IDE files.
 
 Platforms
 --------------------------------------------------------------------------------
 Martock targets two platforms: Windows and *buntu Linux distributions. Martock
 should not depend on any tools or code that isolate it to a specific platform.
-
-Patch Process
---------------------------------------------------------------------------------
-Any code committed to Martock must be first reviewed locally by the author in
-two areas. The patch or feature must include a test of all its cases, as well as
-a passing log in a run through valgrind to ensure it does not leak memory or
-make invalid accesses that other kernels may choke on.
-
-Once the code is tested locally, push it to the remote repository on a **new
-branch, not the master**. Once it is there the other team members can comment on
-the commit, and ammend it where necessary. Once the branch has passed this peer
-review, it can be merged to the master branch.
-
-The exceptions to this rule are hot fixes and aesthetic changes.
 
 Coding Standards
 --------------------------------------------------------------------------------
