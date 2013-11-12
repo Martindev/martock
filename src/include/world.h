@@ -2,7 +2,7 @@
 #define WORLD_H
 
 /* Create a world of the provided size and load it. */
-chunk *world_generate (u16 size, u8 rules);
+chunk *world_generate (const char *s, u16 size, u8 rules);
 
 /* Save a world to disk and unload it. */
 void world_close (chunk *ch);

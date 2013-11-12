@@ -1,54 +1,7 @@
 #ifndef CHUNK_H
 #define CHUNK_H
 
-/* Chunk dimensions. */
-enum {
-        CHUNK_WIDTH  = 500,
-        CHUNK_HEIGHT = 500
-};
-
-/* Chunk level beginnings. */
-enum {
-        CHUNK_SOIL    = CHUNK_HEIGHT / 4,
-        CHUNK_MANTLE  = CHUNK_HEIGHT / 3,
-        CHUNK_CORE    = (CHUNK_HEIGHT / 4) * 3
-};
-
-/* Generator flags. */
-enum {
-        CHUNK_FLAT      = 0x01,
-        CHUNK_NO_CAVES  = 0x02,
-        CHUNK_NO_HILLS  = 0x04,
-        CHUNK_NO_PLANTS = 0x08,
-        CHUNK_FULL      = 0x10
-};
-
-/* Relative positions. */
-enum {
-        CHUNK_RIGHT           = 0,
-        CHUNK_LEFT            = 1,
-        CHUNK_RENDER_DISTANCE = 5
-};
-
-/* Cellular automata modes. */
-enum {
-        CHUNK_BORDER         = 3,
-        CHUNK_TREE           = 20,
-        CHUNK_HILL           = CHUNK_HEIGHT / 5,
-        CHUNK_SMOOTH_RADIUS  = CHUNK_WIDTH / 8,
-        CHUNK_CAVE_SEED      = 40,
-        CHUNK_CAVE_RULE      = 4
-};
-
-typedef struct chunk {
-        u8 rules;
-        int position;
-        struct chunk *right;
-        struct chunk *left;
-        u8 heights[CHUNK_WIDTH];
-        block fore[CHUNK_WIDTH][CHUNK_HEIGHT];
-        block back[CHUNK_WIDTH][CHUNK_HEIGHT];
-} chunk;
+#include <martock.h>
 
 /* Load a chunk from file. */
 chunk *chunk_load (int pos);

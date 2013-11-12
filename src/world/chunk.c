@@ -178,7 +178,7 @@ chunk *chunk_load (int pos)
                 return NULL;
 
         /* Return if the file can't be found. */
-        if (!(file = vfopen("rb", "world/chunks/%d.ch", pos)))
+        if (!(file = vfopen("rb", "worlds/%s/chunks/%d.ch", save, pos)))
                 return NULL;
 
         fread(ch, sizeof(chunk), 1, file);
@@ -385,7 +385,7 @@ void chunk_save_text (const chunk *ch)
         if (!ch)
                 return;
 
-        FILE *file = vfopen("w", "world/chunks/%d.txt", ch->position);
+        FILE *file = vfopen("w", "worlds/%s/chunks/%d.txt", save, ch->position);
 
         if (file)
                 for (int j = 0; j < CHUNK_HEIGHT; j++) {
@@ -419,7 +419,7 @@ void chunk_close (chunk *ch)
 
         ch->left = NULL;
         ch->right = NULL;
-        FILE *file = vfopen("wb", "world/chunks/%d.ch", ch->position);
+        FILE *file = vfopen("wb", "worlds/%s/chunks/%d.ch", save, ch->position);
 
         if (file)
                 fwrite(ch, sizeof(chunk), 1, file);

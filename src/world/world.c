@@ -5,13 +5,16 @@
  *  direction. Keep CHUNK_RENDER_DISTANCE chunks on either side of the origin
  *  in memory and close the others to file.
  *
+ *  @s: The name of the current save profile.
  *  @size: chunks to expand from the origin
  *  @rules: rules of world generation (forward to chunk generation)
  *
  *  @return: pointer to the origin chunk
  */
-chunk *world_generate (u16 size, u8 rules)
+chunk *world_generate (const char *s, u16 size, u8 rules)
 {
+        set_save(s);
+
         if (size < CHUNK_RENDER_DISTANCE)
                 return NULL;
 
@@ -166,7 +169,7 @@ chunk *world_shift (chunk *ch, u8 side)
  */
 void world_view ()
 {
-        chunk *ch = world_generate(20, CHUNK_FULL);
+        chunk *ch = world_generate("test", 20, CHUNK_FULL);
 
         int x = 0;
         int y = 100;

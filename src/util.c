@@ -24,13 +24,32 @@ int init ()
 }
 
 /**
+ *  Set the global save profile.
+ *
+ *  @s: Save profile name.
+ */
+void set_save (const char *s)
+{
+        /* worlds/ = 7; /chunks = 7 */
+        char loc[7 + strlen(s) + 7];
+        memset(loc, 0, 7 + strlen(s) + 7);
+        sprintf(loc, "worlds/%s", s);
+        mkdir("worlds", 0777);
+        mkdir(loc, 0777);
+        sprintf(loc, "worlds/%s/chunks", s);
+        mkdir(loc, 0777);
+        memset(save, 0, SAVE_LEN);
+        sprintf(save, "%s", s);
+}
+
+/**
  *  Open a file with its name.
  *
  *  @mode: the write mode to forward to fopen (e.g. "w", "r")
  *  @msg: the formatted string
  *  @...: the variable argument list
  */
-FILE *vfopen(const char *mode, const char *msg, ...)
+FILE *vfopen (const char *mode, const char *msg, ...)
 {
         va_list li;
         char temp[1024] = {0};
