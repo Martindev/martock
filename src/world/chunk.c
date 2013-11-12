@@ -56,6 +56,35 @@ static void chunk_gen_terrain (chunk *ch, const chunk *neighbor, u8 side)
                 ch->heights[i] = average;
 
                 ch->fore[i][CHUNK_SOIL - ch->heights[i]].id = BLOCK_GRASS;
+                if ((abs(rand()) % 100 < CHUNK_TREE) &&
+                    (i > CHUNK_BORDER) && (i < CHUNK_WIDTH - CHUNK_BORDER)) {
+                        int tree = CHUNK_TREE * 4;
+                        int y = CHUNK_SOIL - ch->heights[i] - 1;
+                        do {
+                                ch->fore[i][y].id = BLOCK_TRUNK;
+                                y--;
+                                if (abs(rand()) % 100 < tree)
+                                        tree /= 2;
+                                else
+                                        tree = 0;
+                        } while (tree);
+
+                        ch->fore[i    ][y - 2].id = BLOCK_LEAVES;
+
+                        ch->fore[i - 1][y - 1].id = BLOCK_LEAVES;
+                        ch->fore[i    ][y - 1].id = BLOCK_LEAVES;
+                        ch->fore[i + 1][y - 1].id = BLOCK_LEAVES;
+
+                        ch->fore[i - 1][y    ].id = BLOCK_LEAVES;
+                        ch->fore[i    ][y    ].id = BLOCK_LEAVES;
+                        ch->fore[i + 1][y    ].id = BLOCK_LEAVES;
+
+                        if (y < CHUNK_SOIL - ch->heights[i] - 2) {
+                                ch->fore[i - 1][y + 1].id = BLOCK_LEAVES;
+                                ch->fore[i    ][y + 1].id = BLOCK_LEAVES;
+                                ch->fore[i + 1][y + 1].id = BLOCK_LEAVES;
+                        }
+                }
                 for (int j = CHUNK_SOIL - ch->heights[i] + 1; j < CHUNK_SOIL; j++)
                         ch->fore[i][j].id = BLOCK_SOIL;
         }
