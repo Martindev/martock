@@ -8,6 +8,9 @@ config.status
 configure
 depcomp
 install-sh
-./world
+worlds
+assets
 .deps
 .dirstamp
+*.o
+martock
