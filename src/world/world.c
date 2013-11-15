@@ -111,6 +111,79 @@ chunk *world_edge (chunk *ch, u8 side)
         return it;
 }
 
+
+/**
+ *  Take a snapshot of a portion of the world asked for; provide the bitmap.
+ *
+ *  @c: chunk
+ *  @x: x coord (by tile)
+ *  @y: y coord (by tile)
+ *  @w: width (in tiles)
+ *  @h: height (in tiles)
+ *  @b: target bitmap
+ */
+void world_get_img(int c, int x, int y, u32 w, u32 h, ALLEGRO_BITMAP *b)
+{
+        ALLEGRO_BITMAP *scr = al_get_target_bitmap();
+
+        block fg, bg;
+        chunk *ch = world;
+        int right = x + w;
+        int bottom = y + h;
+
+        /*if (y < (h / 2)) {
+                y += (h / 2);
+
+        } */
+
+        al_set_target_bitmap(b);
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+
+        al_hold_bitmap_drawing(true);
+        for (int i = x; i < right; i++) {
+                for (int j = y; j < bottom; j++) {
+                        if ((i < 0) && ch->left) {
+                                int ix = CHUNK_WIDTH - abs(i);
+                                fg = ch->left->fore[ix][j];
+                                bg = ch->left->back[ix][j];
+                        } else if ((i >= CHUNK_WIDTH) && ch->right) {
+                                int ix = i % CHUNK_WIDTH;
+                                fg = ch->right->fore[ix][j];
+                                bg = ch->right->back[ix][j];
+                        } else {
+                                fg = ch->fore[i][j];
+                                bg = ch->back[i][j];
+                        }
+
+                        block_draw(fg, bg, (i - x) * tilepix,
+                                   (j - y) * tilepix);
+                }
+        }
+        al_hold_bitmap_drawing(false);
+        al_set_target_bitmap(scr);
+}
+
+/**
+ *  Get the block id at a location.
+ *
+ *  @c: chunk
+ *  @x: x coord
+ *  @y: y coord
+ *
+ *  @return: an id for the block (all flipped bits if chunk out of range)
+ */
+u16 world_get_block(int c, u32 x, u32 y)
+{
+        if (c == world->position)
+                return world->fore[x][y].id;
+        else if (c == world->position - 1)
+                return world->left->fore[x][y].id;
+        else if (c == world->position + 1)
+                return world->right->fore[x][y].id;
+                
+        return 0xffff;
+}
+
 /**
  *  Move the loaded window over to a new occupied chunk. Drop the one left
  *  behind and generate or load a new one.
@@ -123,8 +196,6 @@ chunk *world_edge (chunk *ch, u8 side)
 chunk *world_shift (chunk *ch, u8 side)
 {
         chunk *drop, *new, *edge, *shift;
-
-        clock_t start = clock();
 
         if (!ch)
                 shift = NULL;
@@ -158,9 +229,6 @@ chunk *world_shift (chunk *ch, u8 side)
                 shift = NULL;
         }
 
-        clock_t end = clock();
-        printf ("Shifted in %.3fs\n", ((double)end - (double)start)* 1.0e-6);
-
         return shift;
 }
 
@@ -169,7 +237,8 @@ chunk *world_shift (chunk *ch, u8 side)
  */
 void world_view ()
 {
-        chunk *ch = world_generate("test", 20, CHUNK_FULL);
+        world = world_generate("test", 20, CHUNK_FULL);
+        chunk *ch = world;
 
         int x = 0;
         int y = 100;
@@ -183,20 +252,7 @@ void world_view ()
         int height = tihi * scale;
         int width = tiwi * scale;
 
-        ALLEGRO_EVENT event;
-        ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
-        ALLEGRO_DISPLAY *screen = al_create_display(tiwi * scale, tihi * scale);
-        ALLEGRO_FONT *font = al_load_ttf_font("assets/font.ttf", 20, 0);
-        ALLEGRO_TIMEOUT timeout;
-        ALLEGRO_KEYBOARD_STATE state;
-
         block fg, bg;
-        block_init(NULL);
-
-        al_register_event_source(queue,
-                                 al_get_display_event_source(screen));
-        al_register_event_source(queue,
-                                 al_get_keyboard_event_source());
 
         do {
                 al_clear_to_color(al_map_rgb(0, 0, 0));
@@ -218,7 +274,7 @@ void world_view ()
                                 }
 
                                 block_draw(fg, bg, (i - x) * scale,
-                                           (j - y) * scale, scale);
+                                           (j - y) * scale);
                         }
                 al_hold_bitmap_drawing(false);
 
@@ -279,10 +335,5 @@ void world_view ()
                 }
 
         } while (running);
-
-        al_destroy_display(screen);
-        al_destroy_event_queue(queue);
-        world_close(ch);
-        block_deinit();
 
 }

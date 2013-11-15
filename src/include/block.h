@@ -7,7 +7,7 @@
 int block_init (const char *tex);
 
 /* Render a tile. */
-void block_draw (block fg, block bg, int x, int y, int scale);
+void block_draw (block fg, block bg, int x, int y);
 
 /* Get a pointer to a sprite's sub bitmap. */
 ALLEGRO_BITMAP *block_sprite(u16 id);

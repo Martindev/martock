@@ -20,6 +20,25 @@ int init ()
         al_set_new_display_flags(ALLEGRO_OPENGL);
         al_set_new_bitmap_flags(ALLEGRO_VIDEO_BITMAP);
 
+        memset(save, 0, SAVE_LEN);
+        tilepix = 60;
+        width = 800;
+        height = 600;
+        world = NULL;
+
+        /* Create the screen first because any bitmaps made before the screen
+           will be memory bitmaps (aka "crawlers"). */
+        queue = al_create_event_queue();
+        screen = al_create_display(width, height);
+        font = al_load_ttf_font("assets/font.ttf", 20, 0);
+
+        al_register_event_source(queue,
+                                 al_get_display_event_source(screen));
+        al_register_event_source(queue,
+                                 al_get_keyboard_event_source());
+
+        block_init(NULL);
+
         return 0;
 }
 
@@ -66,4 +85,8 @@ FILE *vfopen (const char *mode, const char *msg, ...)
  */
 void deinit ()
 {
+        al_destroy_display(screen);
+        al_destroy_event_queue(queue);
+        world_close(world);
+        block_deinit();
 }

@@ -115,9 +115,8 @@ int block_init (const char *tex)
 * @bg: background block
 * @x: horizontal pixel coordinate
 * @y: vertical pixel coordinate
-* @scale: size to draw the tile
 */
-void block_draw (block fg, block bg, int x, int y, int scale)
+void block_draw (block fg, block bg, int x, int y)
 {
         if ((fg.id < 0) || (fg.id >= BLOCK_COUNT)) {
                 fprintf(stderr, "Foreground err: %d", fg.id);
@@ -131,15 +130,15 @@ void block_draw (block fg, block bg, int x, int y, int scale)
 
         if ((profiles[fg.id].opacity < BLOCK_OPAQUE) && bg.id) {
                 al_draw_scaled_bitmap(backs[bg.id], 0, 0, BLOCK_SIZE,
-                                      BLOCK_SIZE, x, y, scale, scale, 0);
+                                      BLOCK_SIZE, x, y, tilepix, tilepix, 0);
                 if (fg.id)
                         al_draw_tinted_scaled_bitmap(sprites[fg.id],
                                 al_map_rgba_f(1, 1, 1, profiles[fg.id].opacity),
-                                0, 0, BLOCK_SIZE, BLOCK_SIZE, x, y, scale,
-                                scale, 0);
+                                0, 0, BLOCK_SIZE, BLOCK_SIZE, x, y, tilepix,
+                                tilepix, 0);
         } else
                 al_draw_scaled_bitmap(sprites[fg.id], 0, 0, BLOCK_SIZE,
-                                      BLOCK_SIZE, x, y, scale, scale, 0);
+                                      BLOCK_SIZE, x, y, tilepix, tilepix, 0);
 }
 
 /**

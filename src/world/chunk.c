@@ -266,7 +266,7 @@ void chunk_view (chunk *ch)
                                 fg = ch->fore[i][j];
                                 bg = ch->back[i][j];
                                 block_draw(fg, bg, (i - x) * scale,
-                                           (j - y) * scale, scale);
+                                           (j - y) * scale);
                         }
                 al_hold_bitmap_drawing(false);
 
@@ -364,7 +364,7 @@ void chunk_save_img (chunk *ch)
                 for (int j = 0; j < CHUNK_HEIGHT; j++) {
                                 fg = ch->fore[i][j];
                                 bg = ch->back[i][j];
-                                block_draw(fg, bg, i * scale, j * scale, scale);
+                                block_draw(fg, bg, i * scale, j * scale);
                 }
 
         char temp[100] = {0};
