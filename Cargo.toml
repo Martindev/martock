@@ -1,0 +1,6 @@
+[package]
+name = "martock"
+version = "0.1.0"
+authors = ["Payton Turnage <paytonturnage@gmail.com>"]
+
+[dependencies]
