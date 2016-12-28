@@ -1,3 +1,5 @@
+//! block is the atomic unit of the world.
+
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub enum Block {
     Void,
