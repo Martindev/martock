@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["Life","Life should be implemented by anything that wants to change its state in response to the world and bodies."]]});

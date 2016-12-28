@@ -47,8 +47,95 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-0' class='srclink' href='../src/martock/src/main.rs.html#1-49' title='goto source code'>[src]</a></span></h1>
-</section>
+               </span><a id='src-0' class='srclink' href='../src/martock/src/main.rs.html#1-71' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>martock is a game.</p>
+
+<h2 id='initialization' class='section-header'><a href='#initialization'>Initialization</a></h2>
+<p>In no particular order, the following must be initialized before the main loop. See the module
+docs for more information on each.</p>
+
+<ul>
+<li>World</li>
+<li>Arbiter</li>
+<li>Reality</li>
+<li>Sentience, which interact with the world and may implement Body, Committer, and/or Life</li>
+</ul>
+
+<h2 id='main-loop' class='section-header'><a href='#main-loop'>Main Loop</a></h2>
+<ol>
+<li>Give committers the state of the world and bodies and ask for commits to change the
+world state.</li>
+<li>Pass all commits through the arbiter which decides whether the commit should be
+applied to the world state.</li>
+<li>Apply reality to all the bodies (physics and other laws of nature).</li>
+<li>Update all the mutable world observers (who implement the life trait), such as the
+camera, sound effects, etc.</li>
+</ol>
+</div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='arbiter/index.html'
+                                  title='martock::arbiter'>arbiter</a></td>
+                           <td class='docblock-short'>
+                                <p>arbiter defends the world from invalid modifications.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='block/index.html'
+                                  title='martock::block'>block</a></td>
+                           <td class='docblock-short'>
+                                <p>block is the atomic unit of the world.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='body/index.html'
+                                  title='martock::body'>body</a></td>
+                           <td class='docblock-short'>
+                                <p>body is anything with a physical representation in the world subject to reality.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='commit/index.html'
+                                  title='martock::commit'>commit</a></td>
+                           <td class='docblock-short'>
+                                <p>commit is the atomic unit of change to the world state.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='committer/index.html'
+                                  title='martock::committer'>committer</a></td>
+                           <td class='docblock-short'>
+                                <p>committer is anything that modifies the world.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='life/index.html'
+                                  title='martock::life'>life</a></td>
+                           <td class='docblock-short'>
+                                <p>life is anything that changes state in response to the world and bodies.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='reality/index.html'
+                                  title='martock::reality'>reality</a></td>
+                           <td class='docblock-short'>
+                                <p>reality is laws and mechanics of nature.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='tool/index.html'
+                                  title='martock::tool'>tool</a></td>
+                           <td class='docblock-short'>
+                                <p>tool is a medium by which to modify the world.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='world/index.html'
+                                  title='martock::world'>world</a></td>
+                           <td class='docblock-short'>
+                                <p>world manages the object world state.</p>
+                           </td>
+                       </tr></table></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>

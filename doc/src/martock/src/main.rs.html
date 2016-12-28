@@ -91,16 +91,60 @@
 <span id="47">47</span>
 <span id="48">48</span>
 <span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
 </pre><pre class='rust '>
-<span class='kw'>mod</span> <span class='ident'>arbiter</span>;
-<span class='kw'>mod</span> <span class='ident'>block</span>;
-<span class='kw'>mod</span> <span class='ident'>body</span>;
-<span class='kw'>mod</span> <span class='ident'>commit</span>;
-<span class='kw'>mod</span> <span class='ident'>committer</span>;
-<span class='kw'>mod</span> <span class='ident'>life</span>;
-<span class='kw'>mod</span> <span class='ident'>reality</span>;
-<span class='kw'>mod</span> <span class='ident'>tool</span>;
-<span class='kw'>mod</span> <span class='ident'>world</span>;
+<span class='doccomment'>//! martock is a game.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! ## Initialization</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! In no particular order, the following must be initialized before the main loop. See the module</span>
+<span class='doccomment'>//! docs for more information on each.</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! * World</span>
+<span class='doccomment'>//! * Arbiter</span>
+<span class='doccomment'>//! * Reality</span>
+<span class='doccomment'>//! * Sentience, which interact with the world and may implement Body, Committer, and/or Life</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! ## Main Loop</span>
+<span class='doccomment'>//!</span>
+<span class='doccomment'>//! 1. Give committers the state of the world and bodies and ask for commits to change the</span>
+<span class='doccomment'>//!    world state.</span>
+<span class='doccomment'>//! 2. Pass all commits through the arbiter which decides whether the commit should be</span>
+<span class='doccomment'>//!    applied to the world state.</span>
+<span class='doccomment'>//! 3. Apply reality to all the bodies (physics and other laws of nature).</span>
+<span class='doccomment'>//! 4. Update all the mutable world observers (who implement the life trait), such as the</span>
+<span class='doccomment'>//!    camera, sound effects, etc.</span>
+
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>arbiter</span>;
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>block</span>;
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>body</span>;
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>commit</span>;
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>committer</span>;
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>life</span>;
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>reality</span>;
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>tool</span>;
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>world</span>;
 <span class='kw'>mod</span> <span class='ident'>world_test</span>;
 
 <span class='kw'>struct</span> <span class='ident'>Sentience</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
