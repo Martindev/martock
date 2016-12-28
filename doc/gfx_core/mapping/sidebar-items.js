@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Error","Error mapping a buffer."]],"struct":[["RWable","Readable & writable mapping."],["RWer","Mapping reader & writer"],["Raw","Raw mapping providing status tracking"],["Readable","Readable mapping."],["Reader","Mapping reader"],["Writable","Writable mapping."],["Writer","Mapping writer"]]});
