@@ -26,7 +26,7 @@ fn engine(a: arbiter::Arbiter,
             }
         }
 
-        a.arbite(&mut w, cls.as_slice());
+        a.arbitrate(&mut w, cls.as_slice());
         r.apply(&w, sentience.bodies.as_mut_slice());
 
         for mut life in sentience.living.iter_mut() {
