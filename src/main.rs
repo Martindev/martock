@@ -1,12 +1,12 @@
-mod arbiter;
-mod block;
-mod body;
-mod commit;
-mod committer;
-mod life;
-mod reality;
-mod tool;
-mod world;
+pub mod arbiter;
+pub mod block;
+pub mod body;
+pub mod commit;
+pub mod committer;
+pub mod life;
+pub mod reality;
+pub mod tool;
+pub mod world;
 mod world_test;
 
 struct Sentience<'a> {
