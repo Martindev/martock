@@ -6,6 +6,6 @@ pub trait CL {
     fn commits(&self) -> Iterator<Item=commit::Commit>;
 }
 
-pub trait Committer {
-    fn cl(&world::World, &[&body::Body]) -> Option<Box<CL>>;
+pub trait Committer<'a> {
+    fn cl(&self, &world::World, &[&body::Body]) -> Option<&'a CL>;
 }
