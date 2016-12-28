@@ -2,3 +2,4 @@
 
 ![Build Status](https://travis-ci.org/Martindev/martock.svg?branch=master)
 ![LOC](https://tokei.rs/b1/github/Martindev/martock)
+[![rust-doc](https://img.shields.io/badge/docs-reference-orange.svg)](https://martindev.github.io/martock/doc/martock/)
