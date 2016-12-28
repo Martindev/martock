@@ -1,3 +1,4 @@
+mod arbiter;
 mod block;
 mod body;
 mod commit;
@@ -13,17 +14,7 @@ struct Sentience<'a> {
     living: Vec<&'a mut life::Life>,
 }
 
-fn arbite(_: &mut world::World, _: commit::Commit) {}
-
-fn arbiter(w: &mut world::World, cls: &[committer::CL]) {
-    for cl in cls {
-        for commit in cl.commits() {
-            arbite(w, commit);
-        }
-    }
-}
-
-fn engine(r: reality::Reality, mut w: world::World, mut sentience: Sentience) {
+fn engine(a: arbiter::Arbiter, r: reality::Reality, mut w: world::World, mut sentience: Sentience) {
     loop {
         let mut cls = Vec::new();
         for c in sentience.committers.iter() {
@@ -32,7 +23,7 @@ fn engine(r: reality::Reality, mut w: world::World, mut sentience: Sentience) {
             }
         }
 
-        arbiter(&mut w, cls.as_slice());
+        a.arbite(&mut w, cls.as_slice());
         r.apply(&w, sentience.bodies.as_mut_slice());
 
         for mut life in sentience.living.iter_mut() {
@@ -42,6 +33,7 @@ fn engine(r: reality::Reality, mut w: world::World, mut sentience: Sentience) {
 }
 
 fn main() {
+    let a = arbiter::Arbiter::new();
     let r = reality::Reality::new();
     let w = world::World::new();
     let s = Sentience{
@@ -49,5 +41,5 @@ fn main() {
         committers: Vec::new(),
         living: Vec::new(),
     };
-    engine(r, w, s);
+    engine(a, r, w, s);
 }

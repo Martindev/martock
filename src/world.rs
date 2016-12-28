@@ -6,9 +6,13 @@
 /// except in fulfillment of a user's request.
 pub struct World;
 
+use block;
+
 impl World {
     /// new creates a new world
     pub fn new() -> Self {
         World{}
     }
+
+    pub fn set_block(&mut self, _: block::BlockID, _: block::Block) {} 
 }
