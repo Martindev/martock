@@ -1,4 +1,5 @@
 mod world;
+mod entity;
 mod commit;
 mod committer;
 mod block;
