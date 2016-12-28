@@ -2,6 +2,7 @@ mod block;
 mod body;
 mod commit;
 mod committer;
+mod reality;
 mod tool;
 mod world;
 
@@ -20,9 +21,7 @@ fn arbiter(w: &mut world::World, cls: &[committer::CL]) {
     }
 }
 
-fn reality(_: &world::World, _: &mut [&body::Body]) {}
-
-fn engine(mut w: world::World, mut sentience: Sentience) {
+fn engine(r: reality::Reality, mut w: world::World, mut sentience: Sentience) {
     loop {
         let mut cls = Vec::new();
         for c in sentience.committers.iter() {
@@ -32,15 +31,16 @@ fn engine(mut w: world::World, mut sentience: Sentience) {
         }
 
         arbiter(&mut w, cls.as_slice());
-        reality(&w, sentience.bodies.as_mut_slice());
+        r.apply(&w, sentience.bodies.as_mut_slice());
     }
 }
 
 fn main() {
+    let r = reality::Reality::new();
     let w = world::World::new();
     let s = Sentience{
         bodies: Vec::new(),
         committers: Vec::new(),
     };
-    engine(w, s);
+    engine(r, w, s);
 }
