@@ -11,8 +11,8 @@ use block;
 impl World {
     /// new creates a new world
     pub fn new() -> Self {
-        World{}
+        World {}
     }
 
-    pub fn set_block(&mut self, _: block::BlockID, _: block::Block) {} 
+    pub fn set_block(&mut self, _: block::BlockID, _: block::Block) {}
 }

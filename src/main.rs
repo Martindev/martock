@@ -14,7 +14,10 @@ struct Sentience<'a> {
     living: Vec<&'a mut life::Life>,
 }
 
-fn engine(a: arbiter::Arbiter, r: reality::Reality, mut w: world::World, mut sentience: Sentience) {
+fn engine(a: arbiter::Arbiter,
+          r: reality::Reality,
+          mut w: world::World,
+          mut sentience: Sentience) {
     loop {
         let mut cls = Vec::new();
         for c in sentience.committers.iter() {
@@ -36,7 +39,7 @@ fn main() {
     let a = arbiter::Arbiter::new();
     let r = reality::Reality::new();
     let w = world::World::new();
-    let s = Sentience{
+    let s = Sentience {
         bodies: Vec::new(),
         committers: Vec::new(),
         living: Vec::new(),

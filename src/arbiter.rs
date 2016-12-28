@@ -9,7 +9,7 @@ pub struct Arbiter;
 /// Arbiter decides whether to apply commits to the world.
 impl Arbiter {
     pub fn new() -> Self {
-        Arbiter{}
+        Arbiter {}
     }
 
     pub fn arbite(&self, w: &mut world::World, cls: &[committer::CL]) {
@@ -22,5 +22,7 @@ impl Arbiter {
         }
     }
 
-    fn approve(&self, _: &commit::Commit) -> bool { true }
+    fn approve(&self, _: &commit::Commit) -> bool {
+        true
+    }
 }
