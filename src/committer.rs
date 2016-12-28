@@ -2,10 +2,14 @@ use body;
 use commit;
 use world;
 
-pub trait CL {
-    fn commits(&self) -> Iterator<Item=commit::Commit>;
+pub enum CL {}
+
+impl CL {
+    pub fn commits(&self) -> Vec<commit::Commit> {
+        Vec::new()
+    }
 }
 
-pub trait Committer<'a> {
-    fn cl(&self, &world::World, &[&body::Body]) -> Option<&'a CL>;
+pub trait Committer {
+    fn cl(&self, &world::World, &[&body::Body]) -> Option<CL>;
 }

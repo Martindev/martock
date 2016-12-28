@@ -1,8 +1,7 @@
-//! world defines the martock world frontend.
+pub struct World;
 
-/// Loads a world implementation.
-pub trait WorldLoader<T: World> {
-    fn world(&self) -> T;
+impl World {
+    fn new() -> Self {
+        World{}
+    }
 }
-
-pub trait World {}
