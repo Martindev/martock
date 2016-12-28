@@ -5,7 +5,12 @@ mod committer;
 mod tool;
 mod world;
 
-fn arbite(w: &mut world::World, c: commit::Commit) {}
+struct Sentience<'a> {
+    bodies: Vec<&'a body::Body>,
+    committers: Vec<&'a committer::Committer>,
+}
+
+fn arbite(_: &mut world::World, _: commit::Commit) {}
 
 fn arbiter(w: &mut world::World, cls: &[committer::CL]) {
     for cl in cls {
@@ -15,22 +20,27 @@ fn arbiter(w: &mut world::World, cls: &[committer::CL]) {
     }
 }
 
-fn reality(w: &world::World, bodies: &mut [&body::Body]) {}
+fn reality(_: &world::World, _: &mut [&body::Body]) {}
 
-fn engine(mut w: world::World, mut bodies: Vec<&body::Body>, mut committers: Vec<&committer::Committer>) {
+fn engine(mut w: world::World, mut sentience: Sentience) {
     loop {
         let mut cls = Vec::new();
-        for c in committers.iter() {
-            if let Some(cl) = c.cl(&w, &bodies) {
+        for c in sentience.committers.iter() {
+            if let Some(cl) = c.cl(&w, &sentience.bodies) {
                 cls.push(cl);
             }
         }
 
         arbiter(&mut w, cls.as_slice());
-        reality(&w, bodies.as_mut_slice());
-
+        reality(&w, sentience.bodies.as_mut_slice());
     }
 }
 
-fn main() {     
+fn main() {
+    let w = world::World::new();
+    let s = Sentience{
+        bodies: Vec::new(),
+        committers: Vec::new(),
+    };
+    engine(w, s);
 }

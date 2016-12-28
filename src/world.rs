@@ -1,7 +1,7 @@
 pub struct World;
 
 impl World {
-    fn new() -> Self {
+    pub fn new() -> Self {
         World{}
     }
 }
