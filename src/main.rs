@@ -20,7 +20,11 @@
 //! 4. Update all the mutable world observers (who implement the life trait), such as the
 //!    camera, sound effects, etc.
 
+extern crate piston_window;
+extern crate sdl2_window;
+
 pub mod arbiter;
+pub mod camera;
 pub mod block;
 pub mod body;
 pub mod commit;
@@ -31,41 +35,56 @@ pub mod tool;
 pub mod world;
 mod world_test;
 
+struct Moderators {
+    arbiter: arbiter::Arbiter,
+    reality: reality::Reality,
+}
+
 struct Sentience<'a> {
-    bodies: Vec<&'a body::Body>,
     committers: Vec<&'a committer::Committer>,
+}
+
+struct State<'a> {
+    world: world::World,
+    bodies: Vec<&'a body::Body>,
+    mutable_bodies: Vec<&'a mut body::Body>,
     living: Vec<&'a mut life::Life>,
 }
 
-fn engine(a: arbiter::Arbiter,
-          r: reality::Reality,
-          mut w: world::World,
-          mut sentience: Sentience) {
+fn engine(moderators: Moderators, sentience: Sentience, mut state: State) {
     loop {
         let mut cls = Vec::new();
         for c in sentience.committers.iter() {
-            if let Some(cl) = c.cl(&w, &sentience.bodies) {
+            if let Some(cl) = c.cl(&state.world, &state.bodies) {
                 cls.push(cl);
             }
         }
 
-        a.arbitrate(&mut w, cls.as_slice());
-        r.apply(&w, sentience.bodies.as_mut_slice());
+        moderators.arbiter.arbitrate(&mut state.world, cls.as_slice());
+        moderators.reality.apply(&state.world, state.mutable_bodies.as_slice());
 
-        for mut life in sentience.living.iter_mut() {
-            life.update(&w, &sentience.bodies);
+        for mut life in state.living.iter_mut() {
+            life.update(&state.world, state.bodies.as_slice());
         }
     }
 }
 
 fn main() {
-    let a = arbiter::Arbiter::new();
-    let r = reality::Reality::new();
-    let w = world::World::new();
-    let s = Sentience {
-        bodies: Vec::new(),
-        committers: Vec::new(),
-        living: Vec::new(),
+    let mut cam = camera::Camera::new(640, 480).expect("Failed to construct window.");
+
+    let moderators = Moderators {
+        arbiter: arbiter::Arbiter::new(),
+        reality: reality::Reality::new(),
     };
-    engine(a, r, w, s);
+
+    let state = State {
+        world: world::World::new(),
+        bodies: Vec::new(),
+        mutable_bodies: Vec::new(),
+        living: vec![&mut cam],
+    };
+
+    let sentience = Sentience { committers: Vec::new() };
+
+    engine(moderators, sentience, state);
 }

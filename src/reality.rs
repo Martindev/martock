@@ -11,5 +11,5 @@ impl Reality {
         Reality {}
     }
 
-    pub fn apply(&self, _: &world::World, _: &mut [&body::Body]) {}
+    pub fn apply(&self, _: &world::World, _: &[&mut body::Body]) {}
 }
