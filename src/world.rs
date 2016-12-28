@@ -1,4 +1,4 @@
-//! world is the objective world manager for martock.
+//! world manages the object world state.
 
 use std;
 use std::collections::HashMap;

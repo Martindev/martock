@@ -1,3 +1,5 @@
+//! commit is the atomic unit of change to the world state.
+
 use block;
 use tool;
 

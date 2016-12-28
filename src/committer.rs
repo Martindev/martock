@@ -1,3 +1,5 @@
+//! committer is anything that modifies the world.
+
 use body;
 use commit;
 use world;
