@@ -1,3 +1,25 @@
+//! martock is a game.
+//!
+//! ## Initialization
+//!
+//! In no particular order, the following must be initialized before the main loop. See the module
+//! docs for more information on each.
+//!
+//! * World
+//! * Arbiter
+//! * Reality
+//! * Sentience, which interact with the world and may implement Body, Committer, and/or Life
+//!
+//! ## Main Loop
+//!
+//! 1. Give committers the state of the world and bodies and ask for commits to change the
+//!    world state.
+//! 2. Pass all commits through the arbiter which decides whether the commit should be
+//!    applied to the world state.
+//! 3. Apply reality to all the bodies (physics and other laws of nature).
+//! 4. Update all the mutable world observers (who implement the life trait), such as the
+//!    camera, sound effects, etc.
+
 pub mod arbiter;
 pub mod block;
 pub mod body;
