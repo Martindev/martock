@@ -1,7 +1,8 @@
 language: rust
 before_install:
-- sudo apt-get -qq update
-- sudo apt-get install -y libsdl2-dev
+- sudo add-apt-repository -y ppa:team-xbmc/ppa
+- sudo apt-get update -qq
+- sudo apt-get install -y  libsdl2-dev
 - openssl aes-256-cbc -K $encrypted_1b1c25dbcf5c_key -iv $encrypted_1b1c25dbcf5c_iv
   -in scripts/id_rsa.enc -out scripts/id_rsa -d
 script:
