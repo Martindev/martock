@@ -2,6 +2,7 @@ mod block;
 mod body;
 mod commit;
 mod committer;
+mod life;
 mod reality;
 mod tool;
 mod world;
@@ -9,6 +10,7 @@ mod world;
 struct Sentience<'a> {
     bodies: Vec<&'a body::Body>,
     committers: Vec<&'a committer::Committer>,
+    living: Vec<&'a mut life::Life>,
 }
 
 fn arbite(_: &mut world::World, _: commit::Commit) {}
@@ -32,6 +34,10 @@ fn engine(r: reality::Reality, mut w: world::World, mut sentience: Sentience) {
 
         arbiter(&mut w, cls.as_slice());
         r.apply(&w, sentience.bodies.as_mut_slice());
+
+        for mut life in sentience.living.iter_mut() {
+            life.update(&w, &sentience.bodies);
+        }
     }
 }
 
@@ -41,6 +47,7 @@ fn main() {
     let s = Sentience{
         bodies: Vec::new(),
         committers: Vec::new(),
+        living: Vec::new(),
     };
     engine(r, w, s);
 }
