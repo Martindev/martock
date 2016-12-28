@@ -7,6 +7,7 @@ mod life;
 mod reality;
 mod tool;
 mod world;
+mod world_test;
 
 struct Sentience<'a> {
     bodies: Vec<&'a body::Body>,

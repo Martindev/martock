@@ -16,7 +16,7 @@ impl Arbiter {
         for cl in cls.iter() {
             for commit in cl.commits().iter() {
                 if self.approve(commit) {
-                    w.set_block(commit.block, commit.next_state);
+                    w.set_block(commit.x, commit.y, commit.next_state);
                 }
             }
         }
