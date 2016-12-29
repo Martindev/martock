@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `World` struct in crate `martock`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, World">
+    <meta name="description" content="API documentation for the Rust `Renderer` struct in crate `martock`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Renderer">
 
-    <title>martock::world::World - Rust</title>
+    <title>martock::render::Renderer - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
@@ -28,7 +28,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='../index.html'>martock</a>::<wbr><a href='index.html'>world</a></p><script>window.sidebarCurrent = {name: 'World', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'><a href='../index.html'>martock</a>::<wbr><a href='index.html'>render</a></p><script>window.sidebarCurrent = {name: 'Renderer', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -43,20 +43,14 @@
     </nav>
 
     <section id='main' class="content struct">
-<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>martock</a>::<wbr><a href='index.html'>world</a>::<wbr><a class='struct' href=''>World</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>martock</a>::<wbr><a href='index.html'>render</a>::<wbr><a class='struct' href=''>Renderer</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-109' class='srclink' href='../../src/martock/src/world.rs.html#45-47' title='goto source code'>[src]</a></span></h1>
-<pre class='rust struct'>pub struct World { /* fields omitted */ }</pre><div class='docblock'><p>World manages changing and accessing the state of the world, which is a three dimensional array
-of blocks which can vary in state and behavior. World is explicitly not responsible for
-determining the content of the world by itself; World should not modify the state of the world
-except in fulfillment of a user&#39;s request.</p>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../../martock/world/struct.World.html' title='martock::world::World'>World</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-111' class='srclink' href='../../src/martock/src/world.rs.html#49-74' title='goto source code'>[src]</a></span></h3>
+               </span><a id='src-75' class='srclink' href='../../src/martock/src/render/mod.rs.html#10' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Renderer;</pre><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../../martock/render/struct.Renderer.html' title='martock::render::Renderer'>Renderer</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-77' class='srclink' href='../../src/martock/src/render/mod.rs.html#12-25' title='goto source code'>[src]</a></span></h3>
 <div class='impl-items'><h4 id='method.new' class='method'><span id='new.v' class='invisible'><code>fn <a href='#method.new' class='fnname'>new</a>() -&gt; Self</code></span></h4>
-<div class='docblock'><p>new creates a new world</p>
-</div><h4 id='method.block' class='method'><span id='block.v' class='invisible'><code>fn <a href='#method.block' class='fnname'>block</a>(&amp;self, x: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a>, y: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='enum' href='../../martock/block/enum.Block.html' title='martock::block::Block'>Block</a>&gt;</code></span></h4>
-<h4 id='method.set_block' class='method'><span id='set_block.v' class='invisible'><code>fn <a href='#method.set_block' class='fnname'>set_block</a>(&amp;mut self, x: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a>, y: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>, next_state: <a class='enum' href='../../martock/block/enum.Block.html' title='martock::block::Block'>Block</a>)</code></span></h4>
+<h4 id='method.render' class='method'><span id='render.v' class='invisible'><code>fn <a href='#method.render' class='fnname'>render</a>(&amp;self, _: &amp;<a class='struct' href='../../martock/world/struct.World.html' title='martock::world::World'>World</a>, _: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a>&amp;<a class='trait' href='../../martock/body/trait.Body.html' title='martock::body::Body'>Body</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>, args: RenderArgs, gl: &amp;mut GlGraphics)</code></span></h4>
 </div></section>
     <section id='search' class="content hidden"></section>
 

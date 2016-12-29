@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `life` mod in crate `martock`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, life">
+    <meta name="description" content="Source to the Rust file `src/interactive.rs`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang">
 
-    <title>martock::life - Rust</title>
+    <title>interactive.rs.html -- source</title>
 
-    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
-    <link rel="stylesheet" type="text/css" href="../../main.css">
+    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
     
 
     
@@ -28,7 +28,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='../index.html'>martock</a></p><script>window.sidebarCurrent = {name: 'life', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+        
     </nav>
 
     <nav class="sub">
@@ -42,23 +42,23 @@
         </form>
     </nav>
 
-    <section id='main' class="content mod">
-<h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>martock</a>::<wbr><a class='mod' href=''>life</a></span><span class='out-of-band'><span id='render-detail'>
-                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
-                       [<span class='inner'>&#x2212;</span>]
-                   </a>
-               </span><a id='src-51' class='srclink' href='../../src/martock/src/life.rs.html#1-10' title='goto source code'>[src]</a></span></h1>
-<div class='docblock'><p>life is anything that changes state in response to the world and bodies.</p>
-</div><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class='trait' href='trait.Life.html'
-                                  title='martock::life::Life'>Life</a></td>
-                           <td class='docblock-short'>
-                                <p>Life should be implemented by anything that wants to change its state in response to the world
-and bodies.</p>
-                           </td>
-                       </tr></table></section>
+    <section id='main' class="content source"><pre class="line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+</pre><pre class='rust '>
+<span class='doccomment'>//! interactive is anything influenced by user input.</span>
+
+<span class='kw'>use</span> <span class='ident'>piston</span>::<span class='ident'>input</span>::<span class='ident'>Input</span>;
+
+<span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>Interactive</span> {
+    <span class='kw'>fn</span> <span class='ident'>interact</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>i</span>: <span class='kw-2'>&amp;</span><span class='ident'>Input</span>);
+}
+</pre>
+</section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
@@ -112,11 +112,11 @@ and bodies.</p>
     
 
     <script>
-        window.rootPath = "../../";
+        window.rootPath = "../../../";
         window.currentCrate = "martock";
     </script>
-    <script src="../../jquery.js"></script>
-    <script src="../../main.js"></script>
-    <script defer src="../../search-index.js"></script>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../main.js"></script>
+    <script defer src="../../../search-index.js"></script>
 </body>
 </html>

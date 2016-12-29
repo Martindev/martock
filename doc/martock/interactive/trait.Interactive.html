@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `World` struct in crate `martock`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, World">
+    <meta name="description" content="API documentation for the Rust `Interactive` trait in crate `martock`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Interactive">
 
-    <title>martock::world::World - Rust</title>
+    <title>martock::interactive::Interactive - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
@@ -28,7 +28,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='../index.html'>martock</a>::<wbr><a href='index.html'>world</a></p><script>window.sidebarCurrent = {name: 'World', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'><a href='../index.html'>martock</a>::<wbr><a href='index.html'>interactive</a></p><script>window.sidebarCurrent = {name: 'Interactive', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -42,22 +42,23 @@
         </form>
     </nav>
 
-    <section id='main' class="content struct">
-<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>martock</a>::<wbr><a href='index.html'>world</a>::<wbr><a class='struct' href=''>World</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content trait">
+<h1 class='fqn'><span class='in-band'>Trait <a href='../index.html'>martock</a>::<wbr><a href='index.html'>interactive</a>::<wbr><a class='trait' href=''>Interactive</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-109' class='srclink' href='../../src/martock/src/world.rs.html#45-47' title='goto source code'>[src]</a></span></h1>
-<pre class='rust struct'>pub struct World { /* fields omitted */ }</pre><div class='docblock'><p>World manages changing and accessing the state of the world, which is a three dimensional array
-of blocks which can vary in state and behavior. World is explicitly not responsible for
-determining the content of the world by itself; World should not modify the state of the world
-except in fulfillment of a user&#39;s request.</p>
-</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../../martock/world/struct.World.html' title='martock::world::World'>World</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-111' class='srclink' href='../../src/martock/src/world.rs.html#49-74' title='goto source code'>[src]</a></span></h3>
-<div class='impl-items'><h4 id='method.new' class='method'><span id='new.v' class='invisible'><code>fn <a href='#method.new' class='fnname'>new</a>() -&gt; Self</code></span></h4>
-<div class='docblock'><p>new creates a new world</p>
-</div><h4 id='method.block' class='method'><span id='block.v' class='invisible'><code>fn <a href='#method.block' class='fnname'>block</a>(&amp;self, x: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a>, y: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='enum' href='../../martock/block/enum.Block.html' title='martock::block::Block'>Block</a>&gt;</code></span></h4>
-<h4 id='method.set_block' class='method'><span id='set_block.v' class='invisible'><code>fn <a href='#method.set_block' class='fnname'>set_block</a>(&amp;mut self, x: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a>, y: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>, next_state: <a class='enum' href='../../martock/block/enum.Block.html' title='martock::block::Block'>Block</a>)</code></span></h4>
-</div></section>
+               </span><a id='src-47' class='srclink' href='../../src/martock/src/interactive.rs.html#5-7' title='goto source code'>[src]</a></span></h1>
+<pre class='rust trait'>pub trait Interactive {
+    fn <a href='#tymethod.interact' class='fnname'>interact</a>(&amp;mut self, i: &amp;Input);
+}</pre>
+            <h2 id='required-methods'>Required Methods</h2>
+            <div class='methods'>
+        <h3 id='tymethod.interact' class='method stab '><span id='interact.v' class='invisible'><code>fn <a href='#tymethod.interact' class='fnname'>interact</a>(&amp;mut self, i: &amp;Input)</code></span></h3></div>
+        <h2 id='implementors'>Implementors</h2>
+        <ul class='item-list' id='implementors-list'>
+    </ul><script type="text/javascript" async
+                         src="../../implementors/martock/interactive/trait.Interactive.js">
+                 </script></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
