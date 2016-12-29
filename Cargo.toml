@@ -4,5 +4,5 @@ version = "0.1.0"
 authors = ["Payton Turnage <paytonturnage@gmail.com>"]
 
 [dependencies]
-piston_window = "0.60.0"
+piston = "0.27.0"
 pistoncore-sdl2_window = "0.37.0"

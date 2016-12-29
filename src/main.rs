@@ -20,11 +20,10 @@
 //! 4. Update all the mutable world observers (who implement the life trait), such as the
 //!    camera, sound effects, etc.
 
-extern crate piston_window;
+extern crate piston;
 extern crate sdl2_window;
 
 pub mod arbiter;
-pub mod camera;
 pub mod block;
 pub mod body;
 pub mod commit;
@@ -51,8 +50,16 @@ struct State<'a> {
     living: Vec<&'a mut life::Life>,
 }
 
-fn engine(moderators: Moderators, sentience: Sentience, mut state: State) {
-    loop {
+fn window() -> Result<sdl2_window::Sdl2Window, String> {
+    piston::window::WindowSettings::new("martock", (1280, 720)).build()
+}
+
+fn engine(mut window: sdl2_window::Sdl2Window,
+          moderators: Moderators,
+          sentience: Sentience,
+          mut state: State) {
+    let mut events = piston::event_loop::WindowEvents::new();
+    while let Some(e) = events.next(&mut window) {
         let mut cls = Vec::new();
         for c in sentience.committers.iter() {
             if let Some(cl) = c.cl(&state.world, &state.bodies) {
@@ -64,13 +71,13 @@ fn engine(moderators: Moderators, sentience: Sentience, mut state: State) {
         moderators.reality.apply(&state.world, state.mutable_bodies.as_slice());
 
         for mut life in state.living.iter_mut() {
-            life.update(&state.world, state.bodies.as_slice());
+            life.update(&state.world, state.bodies.as_slice(), &e);
         }
     }
 }
 
 fn main() {
-    let mut cam = camera::Camera::new(640, 480).expect("Failed to construct window.");
+    let window = window().expect("Failed to construct window.");
 
     let moderators = Moderators {
         arbiter: arbiter::Arbiter::new(),
@@ -81,10 +88,10 @@ fn main() {
         world: world::World::new(),
         bodies: Vec::new(),
         mutable_bodies: Vec::new(),
-        living: vec![&mut cam],
+        living: Vec::new(),
     };
 
     let sentience = Sentience { committers: Vec::new() };
 
-    engine(moderators, sentience, state);
+    engine(window, moderators, sentience, state);
 }
