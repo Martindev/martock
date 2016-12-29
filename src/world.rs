@@ -42,16 +42,20 @@ impl Coords {
 /// of blocks which can vary in state and behavior. World is explicitly not responsible for
 /// determining the content of the world by itself; World should not modify the state of the world
 /// except in fulfillment of a user's request.
+///
+/// From the user's perspective there is no concept of world boundaries; initialization is a
+/// per-block property and blocks are not allocated contiguously.
 pub struct World {
     grid: HashMap<i64, Chunk>,
 }
 
 impl World {
-    /// new creates a new world
+    /// new creates a new world.
     pub fn new() -> Self {
         World { grid: HashMap::new() }
     }
 
+    /// Returns a block if it is initialized. If the block is Block::Void, it will return None.
     pub fn block(&self, x: i64, y: u8) -> Option<block::Block> {
         let c = Coords::from(x, y);
         if self.grid.contains_key(&c.chunk) {
@@ -64,6 +68,8 @@ impl World {
         }
     }
 
+    /// Sets a block state to the passed next_state. To deinitialize a Block, set the block state
+    /// to Block::Void.
     pub fn set_block(&mut self, x: i64, y: u8, next_state: block::Block) {
         let c = Coords::from(x, y);
         if !self.grid.contains_key(&c.chunk) {
