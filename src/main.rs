@@ -43,15 +43,7 @@ struct Moderators {
     reality: reality::Reality,
 }
 
-struct Sentience<'a> {
-    committers: Vec<&'a committer::Committer>,
-}
-
-struct State<'a> {
-    bodies: Vec<&'a body::Body>,
-    interactives: Vec<&'a mut interactive::Interactive>,
-    living: Vec<&'a mut life::Life>,
-    mutable_bodies: Vec<&'a mut body::Body>,
+struct State {
     world: world::World,
 }
 
@@ -59,9 +51,26 @@ fn window() -> Result<sdl2_window::Sdl2Window, String> {
     piston::window::WindowSettings::new("martock", (1280, 720)).build()
 }
 
+fn commits(world: &world::World, committers: &[&committer::Committer]) -> Vec<committer::CL> {
+    let mut cls = Vec::new();
+    for c in committers {
+        if let Some(cl) = c.cl(&world) {
+            cls.push(cl);
+        }
+    }
+    cls
+}
+
+fn merge(moderators: &Moderators,
+         change_list: &[committer::CL],
+         bodies: &[&mut body::Body],
+         world: &mut world::World) {
+    moderators.arbiter.arbitrate(change_list, world);
+    moderators.reality.apply(world, bodies);
+}
+
 fn engine(mut window: sdl2_window::Sdl2Window,
           moderators: Moderators,
-          sentience: Sentience,
           renderer: render::Renderer,
           mut state: State) {
     let opengl = opengl_graphics::OpenGL::V4_5;
@@ -70,28 +79,24 @@ fn engine(mut window: sdl2_window::Sdl2Window,
     while let Some(e) = events.next(&mut window) {
         match e {
             piston::input::Event::Update(_) => {
-                let mut cls = Vec::new();
-                for c in sentience.committers.iter() {
-                    if let Some(cl) = c.cl(&state.world, &state.bodies) {
-                        cls.push(cl);
-                    }
-                }
+                let change_list = commits(&state.world, &Vec::new());
+                merge(&moderators, &change_list, &Vec::new(), &mut state.world);
 
-                moderators.arbiter.arbitrate(&mut state.world, cls.as_slice());
-                moderators.reality.apply(&state.world, state.mutable_bodies.as_slice());
-
-                for mut life in state.living.iter_mut() {
-                    life.update(&state.world, state.bodies.as_slice());
+                let mut lives: Vec<&mut life::Life> = Vec::new();
+                for mut life in lives.iter_mut() {
+                    life.update(&state.world);
                 }
             }
             piston::input::Event::Render(args) => {
-                renderer.render(&state.world, state.bodies.as_slice(), args, &mut gl)
+                let bodies: Vec<&body::Body> = Vec::new();
+                renderer.render(&state.world, &bodies, args, &mut gl)
             }
             piston::input::Event::AfterRender(_) => (),
             piston::input::Event::Idle(_) => (),
             piston::input::Event::Input(input) => {
-                for mut interactable in state.interactives.iter_mut() {
-                    interactable.interact(&input);
+                let mut interactives: Vec<&mut interactive::Interactive> = Vec::new();
+                for mut interactive in interactives.iter_mut() {
+                    interactive.interact(&input);
                 }
             }
         }
@@ -106,17 +111,9 @@ fn main() {
         reality: reality::Reality::new(),
     };
 
-    let state = State {
-        bodies: Vec::new(),
-        interactives: Vec::new(),
-        living: Vec::new(),
-        mutable_bodies: Vec::new(),
-        world: world::World::new(),
-    };
-
-    let sentience = Sentience { committers: Vec::new() };
+    let state = State { world: world::World::new() };
 
     let renderer = render::Renderer::new();
 
-    engine(window, moderators, sentience, renderer, state);
+    engine(window, moderators, renderer, state);
 }

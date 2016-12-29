@@ -12,7 +12,7 @@ impl Arbiter {
         Arbiter {}
     }
 
-    pub fn arbitrate(&self, w: &mut world::World, cls: &[committer::CL]) {
+    pub fn arbitrate(&self, cls: &[committer::CL], w: &mut world::World) {
         for cl in cls.iter() {
             for commit in cl.commits().iter() {
                 if self.approve(commit) {

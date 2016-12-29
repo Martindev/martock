@@ -1,6 +1,5 @@
 //! committer is anything that modifies the world.
 
-use body;
 use commit;
 use world;
 
@@ -13,5 +12,5 @@ impl CL {
 }
 
 pub trait Committer {
-    fn cl(&self, &world::World, &[&body::Body]) -> Option<CL>;
+    fn cl(&self, &world::World) -> Option<CL>;
 }
