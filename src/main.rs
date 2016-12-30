@@ -52,6 +52,7 @@ fn window() -> Result<sdl2_window::Sdl2Window, String> {
     piston::window::WindowSettings::new("martock", (1280, 720)).build()
 }
 
+// commits solicits commits from all committers based on the state of the world.
 fn commits(world: &world::World, committers: &[&committer::Committer]) -> Vec<Box<committer::CL>> {
     let mut cls = Vec::new();
     for c in committers {
@@ -62,6 +63,8 @@ fn commits(world: &world::World, committers: &[&committer::Committer]) -> Vec<Bo
     cls
 }
 
+// merge merges change lists from committers into the world state with approval from the arbiter
+// and applies the effects of those changes to all bodies.
 fn merge(moderators: &Moderators,
          change_list: Vec<Box<committer::CL>>,
          bodies: &[&mut body::Body],
@@ -70,10 +73,14 @@ fn merge(moderators: &Moderators,
     moderators.reality.apply(world, bodies);
 }
 
-fn engine(mut window: sdl2_window::Sdl2Window,
-          moderators: Moderators,
-          renderer: render::Renderer,
-          mut state: State) {
+// engine runs the main loop. Engine should not load any resources; those should be passed in.
+// There should be no failure paths in engine.
+fn engine(mut window: sdl2_window::Sdl2Window, mut state: State) {
+    let moderators = Moderators {
+        arbiter: arbiter::Arbiter::new(),
+        reality: reality::Reality::new(),
+    };
+    let renderer = render::Renderer::new();
     let opengl = opengl_graphics::OpenGL::V4_5;
     let mut gl = opengl_graphics::GlGraphics::new(opengl);
     let mut events = piston::event_loop::WindowEvents::new();
@@ -108,14 +115,7 @@ fn engine(mut window: sdl2_window::Sdl2Window,
 fn main() {
     let window = window().expect("Failed to construct window.");
 
-    let moderators = Moderators {
-        arbiter: arbiter::Arbiter::new(),
-        reality: reality::Reality::new(),
-    };
-
     let state = State { world: world::World::new() };
 
-    let renderer = render::Renderer::new();
-
-    engine(window, moderators, renderer, state);
+    engine(window, state);
 }
