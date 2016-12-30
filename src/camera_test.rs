@@ -1,5 +1,6 @@
 #![cfg(test)]
 
+use camera::Camera;
 use camera::View;
 
 struct ViewTest {
@@ -12,6 +13,8 @@ fn view() {
     for t in vec![ViewTest {
                       input: (0.0, 0.0, 10, 12),
                       expected: View {
+                          x: 0.0,
+                          y: 0.0,
                           width: 10,
                           height: 12,
                           block_x: 0,
@@ -23,6 +26,8 @@ fn view() {
                   ViewTest {
                       input: (-0.4, 0.0, 200, 600),
                       expected: View {
+                          x: -0.4,
+                          y: 0.0,
                           width: 200,
                           height: 600,
                           block_x: -1,
@@ -32,6 +37,7 @@ fn view() {
                       },
                   }]
         .iter() {
-        assert_eq!(Window::new(t.input.0, t.input.1), t.expected)
+        assert_eq!(Camera::new(t.input.0, t.input.1, t.input.2, t.input.3).view(),
+                   t.expected)
     }
 }

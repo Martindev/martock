@@ -13,10 +13,10 @@ use world;
 const NUDGE: f64 = 0.1;
 
 /// View represents a focal area of the world.
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct View {
-    x: f64,
-    y: f64,
+    pub x: f64,
+    pub y: f64,
 
     /// width of window in blocks.
     pub width: usize,

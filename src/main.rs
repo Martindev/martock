@@ -29,6 +29,7 @@ pub mod arbiter;
 pub mod block;
 pub mod body;
 pub mod camera;
+mod camera_test;
 pub mod commit;
 pub mod committer;
 pub mod interactive;
