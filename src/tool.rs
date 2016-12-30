@@ -1,4 +1,7 @@
 //! tool is a medium by which to modify the world.
 
 #[derive(Copy, Clone)]
-pub enum Tool {}
+pub enum Tool {
+	God, // Created by the procedural generator.
+	
+}

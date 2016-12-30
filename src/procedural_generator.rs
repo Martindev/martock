@@ -4,8 +4,7 @@
 //!
 //! ProceduralGenerator is responsible for generating chunks of blocks as needed.
 //!
-//! It is also the job of the ProceduralGenerator to report whether or not a block has been 
-//! generated for a given location.
+//! ProceduralGenerator creates blocks 
 
 use block;
 use committer;
@@ -13,7 +12,7 @@ use world;
 
 let chunk_width, world_height = 0;
 
-pub type Chunk = [ [Block, ..chunk_width], ..world_height]
+pub type Chunk = [ [Block; chunk_width]; world_height]
 
 pub struct ProceduralGenerator {
 	next_chunk: Chunk
