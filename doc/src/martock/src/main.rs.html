@@ -226,9 +226,9 @@
 
 <span class='kw'>const</span> <span class='ident'>SCREEN_WIDTH</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>1280</span>;
 <span class='kw'>const</span> <span class='ident'>SCREEN_HEIGHT</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>720</span>;
-<span class='kw'>const</span> <span class='ident'>BLOCK_PIXELS</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>32</span>;
-<span class='kw'>const</span> <span class='ident'>VIEW_WIDTH</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='ident'>SCREEN_WIDTH</span> <span class='op'>/</span> <span class='ident'>BLOCK_PIXELS</span>;
-<span class='kw'>const</span> <span class='ident'>VIEW_HEIGHT</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='ident'>SCREEN_HEIGHT</span> <span class='op'>/</span> <span class='ident'>BLOCK_PIXELS</span>;
+<span class='kw'>const</span> <span class='ident'>BLOCK_PIXELS</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>128</span>;
+<span class='kw'>const</span> <span class='ident'>VIEW_WIDTH</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='ident'>SCREEN_WIDTH</span> <span class='op'>/</span> <span class='ident'>BLOCK_PIXELS</span> <span class='op'>+</span> <span class='number'>1</span>;
+<span class='kw'>const</span> <span class='ident'>VIEW_HEIGHT</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='ident'>SCREEN_HEIGHT</span> <span class='op'>/</span> <span class='ident'>BLOCK_PIXELS</span> <span class='op'>+</span> <span class='number'>2</span>;
 
 <span class='kw'>fn</span> <span class='ident'>window</span>() <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>sdl2_window</span>::<span class='ident'>Sdl2Window</span>, <span class='ident'>String</span><span class='op'>&gt;</span> {
     <span class='ident'>piston</span>::<span class='ident'>window</span>::<span class='ident'>WindowSettings</span>::<span class='ident'>new</span>(<span class='string'>&quot;martock&quot;</span>, (<span class='ident'>SCREEN_WIDTH</span> <span class='kw'>as</span> <span class='ident'>u32</span>, <span class='ident'>SCREEN_HEIGHT</span> <span class='kw'>as</span> <span class='ident'>u32</span>))
