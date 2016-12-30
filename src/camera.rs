@@ -12,42 +12,69 @@ use world;
 // TODO(jacob-zimmerman): Implement natural camera motion in response to input.
 const NUDGE: f64 = 0.1;
 
+/// View represents a focal area of the world.
 #[derive(Copy, Clone, Debug)]
 pub struct View {
-    pub x: f64,
-    pub y: f64,
+    x: f64,
+    y: f64,
+
+    /// width of window in blocks.
     pub width: usize,
+    /// height of window in blocks.
     pub height: usize,
+
+    /// x-index of the top left block in the view.
+    pub block_x: i64,
+    /// y-index of the top left block in the view.
+    pub block_y: u8,
+
+    /// x-translation of view to represent in-block position (multiply by block size in pixels).
+    pub translate_x: f64,
+    /// y-translation of view to represent in-block position (multiply by block size in pixels).
+    pub translate_y: f64,
 }
 
 impl View {
     fn new(x: f64, y: f64, width: usize, height: usize) -> Self {
-        View {
+        let mut view = View {
             x: x,
             y: y,
             width: width,
             height: height,
+            block_x: x as i64,
+            block_y: y as u8,
+            translate_x: (x % 1.0) * -1.0,
+            translate_y: (y % 1.0) * -1.0,
+        };
+        if x < 0.0 {
+            view.block_x -= 1;
+            view.translate_x = (1.0 - (x % 1.0).abs()) * -1.0;
         }
+        view
+    }
+
+    fn renew(&mut self, xdiff: f64, ydiff: f64) {
+        *self = View::new(self.x + xdiff, self.y + ydiff, self.width, self.height)
     }
 
     fn move_up(&mut self) {
         if self.y - NUDGE >= 0.0 {
-            self.y -= NUDGE
+            self.renew(0.0, -NUDGE)
         }
     }
 
     fn move_down(&mut self) {
-        if self.y + NUDGE + self.height as f64 <= world::WORLD_HEIGHT as f64 {
-            self.y += NUDGE
+        if self.y + NUDGE + self.height as f64 <= world::HEIGHT as f64 {
+            self.renew(0.0, NUDGE)
         }
     }
 
     fn move_right(&mut self) {
-        self.x += NUDGE
+        self.renew(NUDGE, 0.0)
     }
 
     fn move_left(&mut self) {
-        self.x -= NUDGE
+        self.renew(-NUDGE, 0.0)
     }
 }
 
