@@ -48,8 +48,15 @@ struct State {
     world: world::World,
 }
 
+const SCREEN_WIDTH: usize = 1280;
+const SCREEN_HEIGHT: usize = 720;
+const BLOCK_PIXELS: usize = 32;
+const VIEW_WIDTH: usize = SCREEN_WIDTH / BLOCK_PIXELS;
+const VIEW_HEIGHT: usize = SCREEN_HEIGHT / BLOCK_PIXELS;
+
 fn window() -> Result<sdl2_window::Sdl2Window, String> {
-    piston::window::WindowSettings::new("martock", (1280, 720)).build()
+    piston::window::WindowSettings::new("martock", (SCREEN_WIDTH as u32, SCREEN_HEIGHT as u32))
+        .build()
 }
 
 // commits solicits commits from all committers based on the state of the world.
@@ -80,11 +87,11 @@ fn engine(mut window: sdl2_window::Sdl2Window, mut state: State) {
         arbiter: arbiter::Arbiter::new(),
         reality: reality::Reality::new(),
     };
-    let renderer = render::Renderer::new(32);
+    let renderer = render::Renderer::new(BLOCK_PIXELS);
     let opengl = opengl_graphics::OpenGL::V4_5;
     let mut gl = opengl_graphics::GlGraphics::new(opengl);
     let mut events = piston::event_loop::WindowEvents::new();
-    let mut camera = camera::Camera::new(camera::Position { x: 0.0, y: 0.0 });
+    let mut camera = camera::Camera::new(0.0, 0.0, VIEW_WIDTH, VIEW_HEIGHT);
     while let Some(e) = events.next(&mut window) {
         match e {
             piston::input::Event::Update(_) => {

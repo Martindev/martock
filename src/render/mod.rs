@@ -32,22 +32,19 @@ impl Renderer {
 
     fn draw(&self,
             world: &world::World,
-            args: RenderArgs,
+            _: RenderArgs,
             cam: &camera::Camera,
             ctx: graphics::Context,
             gl: &mut GlGraphics) {
-        let pos = cam.position();
-        let block_x = pos.x as i64;
-        let block_y = pos.y as u8;
-        let translate_x = pos.x % 1.0 * self.block_size as f64 * -1.0;
-        let translate_y = pos.y % 1.0 * self.block_size as f64 * -1.0;
-
-        let blocks_width = (args.draw_width as usize / self.block_size) + 1;
-        let blocks_height = (args.draw_height as usize / self.block_size) + 1;
+        let view = cam.view();
+        let block_x = view.x as i64;
+        let block_y = view.y as u8;
+        let translate_x = view.x % 1.0 * self.block_size as f64 * -1.0;
+        let translate_y = view.y % 1.0 * self.block_size as f64 * -1.0;
 
         graphics::clear([0.0, 0.0, 0.0, 1.0], gl);
-        for i in 0..blocks_width {
-            for j in 0..blocks_height {
+        for i in 0..view.width {
+            for j in 0..view.height {
                 let block = world.block(block_x + i as i64, block_y + j as u8);
                 let texture = textures::block(block);
                 let x = (i * self.block_size) as f64;
