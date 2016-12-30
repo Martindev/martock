@@ -5,15 +5,17 @@ use std::collections::HashMap;
 
 use block;
 
-const CHUNK_HEIGHT: usize = std::u8::MAX as usize;
+/// The world is WORLD_HEIGHT blocks tall.
+pub const WORLD_HEIGHT: usize = std::u8::MAX as usize;
+
 const CHUNK_WIDTH: usize = std::u8::MAX as usize;
 struct Chunk {
-    blocks: [[block::Block; CHUNK_HEIGHT]; CHUNK_WIDTH],
+    blocks: [[block::Block; WORLD_HEIGHT]; CHUNK_WIDTH],
 }
 
 impl Chunk {
     fn new() -> Self {
-        Chunk { blocks: [[block::Block::Void; CHUNK_HEIGHT]; CHUNK_WIDTH] }
+        Chunk { blocks: [[block::Block::Void; WORLD_HEIGHT]; CHUNK_WIDTH] }
     }
 }
 

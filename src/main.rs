@@ -80,7 +80,7 @@ fn engine(mut window: sdl2_window::Sdl2Window, mut state: State) {
         arbiter: arbiter::Arbiter::new(),
         reality: reality::Reality::new(),
     };
-    let renderer = render::Renderer::new();
+    let renderer = render::Renderer::new(32);
     let opengl = opengl_graphics::OpenGL::V4_5;
     let mut gl = opengl_graphics::GlGraphics::new(opengl);
     let mut events = piston::event_loop::WindowEvents::new();
