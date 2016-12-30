@@ -50,9 +50,9 @@ struct State {
 
 const SCREEN_WIDTH: usize = 1280;
 const SCREEN_HEIGHT: usize = 720;
-const BLOCK_PIXELS: usize = 32;
-const VIEW_WIDTH: usize = SCREEN_WIDTH / BLOCK_PIXELS;
-const VIEW_HEIGHT: usize = SCREEN_HEIGHT / BLOCK_PIXELS;
+const BLOCK_PIXELS: usize = 128;
+const VIEW_WIDTH: usize = SCREEN_WIDTH / BLOCK_PIXELS + 1;
+const VIEW_HEIGHT: usize = SCREEN_HEIGHT / BLOCK_PIXELS + 2;
 
 fn window() -> Result<sdl2_window::Sdl2Window, String> {
     piston::window::WindowSettings::new("martock", (SCREEN_WIDTH as u32, SCREEN_HEIGHT as u32))

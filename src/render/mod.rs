@@ -1,6 +1,10 @@
 //! render renders the state of the world to screen.
 
 mod textures;
+mod window;
+mod window_test;
+
+use std::f64;
 
 use graphics;
 use graphics::Transformed;
@@ -37,23 +41,21 @@ impl Renderer {
             ctx: graphics::Context,
             gl: &mut GlGraphics) {
         let view = cam.view();
-        let block_x = view.x as i64;
-        let block_y = view.y as u8;
-        let translate_x = view.x % 1.0 * self.block_size as f64 * -1.0;
-        let translate_y = view.y % 1.0 * self.block_size as f64 * -1.0;
+        let window = window::Window::new(view.x, view.y);
 
         graphics::clear([0.0, 0.0, 0.0, 1.0], gl);
         for i in 0..view.width {
             for j in 0..view.height {
-                let block = world.block(block_x + i as i64, block_y + j as u8);
+                let block = world.block(window.x + i as i64, window.y + j as u8);
                 let texture = textures::block(block);
                 let x = (i * self.block_size) as f64;
                 let y = (j * self.block_size) as f64;
                 let border = 5.0;
                 let bordered_size = self.block_size as f64 - border;
                 let rect = [x + border, y + border, bordered_size, bordered_size];
-                let border_transform = ctx.zoom(1.0);
-                let edge_transform = border_transform.trans(translate_x, translate_y).transform;
+                let edge_transform = ctx.trans(window.translate_x * self.block_size as f64,
+                           window.translate_y * self.block_size as f64)
+                    .transform;
                 graphics::rectangle(texture, rect, edge_transform, gl);
             }
         }

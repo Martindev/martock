@@ -12,7 +12,7 @@ use world;
 // TODO(jacob-zimmerman): Implement natural camera motion in response to input.
 const NUDGE: f64 = 0.1;
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub struct View {
     pub x: f64,
     pub y: f64,
