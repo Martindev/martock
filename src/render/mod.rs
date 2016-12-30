@@ -1,5 +1,7 @@
 //! render renders the state of the world to screen.
 
+mod textures;
+
 use graphics;
 use piston::input::RenderArgs;
 use opengl_graphics::GlGraphics;
