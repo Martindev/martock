@@ -12,6 +12,10 @@ use block;
 /// The world is WORLD_HEIGHT blocks tall.
 pub const HEIGHT: usize = std::u8::MAX as usize;
 
+/// CHUNK_WIDTH is the width of allocated blocks of world. Use this as a hint if making many
+/// modifications to the world to reduce allocations.
+pub const CHUNK_WIDTH: usize = chunk::WIDTH;
+
 
 /// World manages changing and accessing the state of the world, which is a three dimensional array
 /// of blocks which can vary in state and behavior. World is explicitly not responsible for

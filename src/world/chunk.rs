@@ -4,7 +4,7 @@ use block;
 use world;
 
 const HEIGHT: usize = world::HEIGHT;
-const WIDTH: usize = std::u8::MAX as usize;
+pub const WIDTH: usize = std::u8::MAX as usize;
 
 pub struct Chunk {
     pub blocks: [[block::Block; HEIGHT]; WIDTH],
