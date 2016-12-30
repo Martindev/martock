@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["CL",""]],"trait":[["Committer",""]]});
+initSidebarItems({"trait":[["Committer",""]],"type":[["CL",""]]});
