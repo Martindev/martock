@@ -1,5 +1,5 @@
 (function() {var implementors = {};
-implementors["libc"] = [];implementors["lazy_static"] = [];implementors["gl"] = [];implementors["arrayvec"] = [];implementors["graphics"] = [];implementors["num"] = [];implementors["enum_primitive"] = [];implementors["sdl2"] = [];implementors["sdl2_window"] = [];implementors["image"] = [];implementors["opengl_graphics"] = [];
+implementors["libc"] = [];implementors["lazy_static"] = [];implementors["num"] = [];implementors["enum_primitive"] = [];implementors["graphics"] = [];implementors["sdl2"] = [];implementors["arrayvec"] = [];implementors["image"] = [];implementors["gl"] = [];implementors["sdl2_window"] = [];implementors["opengl_graphics"] = [];
 
             if (window.register_implementors) {
                 window.register_implementors(implementors);
