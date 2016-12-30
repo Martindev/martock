@@ -28,6 +28,7 @@ extern crate opengl_graphics;
 pub mod arbiter;
 pub mod block;
 pub mod body;
+pub mod camera;
 pub mod commit;
 pub mod committer;
 pub mod interactive;
@@ -67,6 +68,7 @@ fn engine(mut window: sdl2_window::Sdl2Window,
     let opengl = opengl_graphics::OpenGL::V4_5;
     let mut gl = opengl_graphics::GlGraphics::new(opengl);
     let mut events = piston::event_loop::WindowEvents::new();
+    let camera = camera::Camera::new(camera::Position { x: 0.0, y: 0.0 });
     while let Some(e) = events.next(&mut window) {
         match e {
             piston::input::Event::Update(_) => {
@@ -85,7 +87,11 @@ fn engine(mut window: sdl2_window::Sdl2Window,
                 }
             }
             piston::input::Event::Render(args) => {
-                renderer.render(&state.world, state.bodies.as_slice(), args, &mut gl)
+                renderer.render(&state.world,
+                                state.bodies.as_slice(),
+                                &camera,
+                                args,
+                                &mut gl)
             }
             piston::input::Event::AfterRender(_) => (),
             piston::input::Event::Idle(_) => (),
