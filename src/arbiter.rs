@@ -12,10 +12,10 @@ impl Arbiter {
         Arbiter {}
     }
 
-    pub fn arbitrate(&self, cls: &[committer::CL], w: &mut world::World) {
-        for cl in cls.iter() {
-            for commit in cl.commits().iter() {
-                if self.approve(commit) {
+    pub fn arbitrate(&self, cls: Vec<Box<committer::CL>>, w: &mut world::World) {
+        for cl in cls {
+            for commit in cl {
+                if self.approve(&commit) {
                     w.set_block(commit.x, commit.y, commit.next_state);
                 }
             }
