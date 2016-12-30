@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["GlyphCache","A struct used for caching rendered font."]],"type":[["Character","The type alias for font characters."],["FontSize","The type used for font size."]]});

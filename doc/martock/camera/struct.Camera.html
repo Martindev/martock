@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `commit` mod in crate `martock`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, commit">
+    <meta name="description" content="API documentation for the Rust `Camera` struct in crate `martock`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Camera">
 
-    <title>martock::commit - Rust</title>
+    <title>martock::camera::Camera - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
@@ -28,7 +28,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='../index.html'>martock</a></p><script>window.sidebarCurrent = {name: 'commit', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+        <p class='location'><a href='../index.html'>martock</a>::<wbr><a href='index.html'>camera</a></p><script>window.sidebarCurrent = {name: 'Camera', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -42,22 +42,17 @@
         </form>
     </nav>
 
-    <section id='main' class="content mod">
-<h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>martock</a>::<wbr><a class='mod' href=''>commit</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>martock</a>::<wbr><a href='index.html'>camera</a>::<wbr><a class='struct' href=''>Camera</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-43' class='srclink' href='../../src/martock/src/commit.rs.html#1-12' title='goto source code'>[src]</a></span></h1>
-<div class='docblock'><p>commit is the atomic unit of change to the world state.</p>
-</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class='struct' href='struct.Commit.html'
-                                  title='martock::commit::Commit'>Commit</a></td>
-                           <td class='docblock-short'>
-                                
-                           </td>
-                       </tr></table></section>
+               </span><a id='src-32' class='srclink' href='../../src/martock/src/camera.rs.html#18-20' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Camera { /* fields omitted */ }</pre><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../../martock/camera/struct.Camera.html' title='martock::camera::Camera'>Camera</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-34' class='srclink' href='../../src/martock/src/camera.rs.html#22-30' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.new' class='method'><span id='new.v' class='invisible'><code>fn <a href='#method.new' class='fnname'>new</a>(initial_position: <a class='struct' href='../../martock/camera/struct.Position.html' title='martock::camera::Position'>Position</a>) -&gt; Self</code></span></h4>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='../../martock/interactive/trait.Interactive.html' title='martock::interactive::Interactive'>Interactive</a> for <a class='struct' href='../../martock/camera/struct.Camera.html' title='martock::camera::Camera'>Camera</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-39' class='srclink' href='../../src/martock/src/camera.rs.html#32-34' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.interact' class='method'><span id='interact.v' class='invisible'><code>fn <a href='../../martock/interactive/trait.Interactive.html#tymethod.interact' class='fnname'>interact</a>(&amp;mut self, i: &amp;Input)</code></span></h4>
+</div></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>

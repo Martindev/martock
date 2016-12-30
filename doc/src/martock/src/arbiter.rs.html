@@ -85,7 +85,7 @@
         <span class='ident'>Arbiter</span> {}
     }
 
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>arbitrate</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>cls</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>committer</span>::<span class='ident'>CL</span>], <span class='ident'>w</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>world</span>::<span class='ident'>World</span>) {
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>arbitrate</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>w</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>world</span>::<span class='ident'>World</span>, <span class='ident'>cls</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>committer</span>::<span class='ident'>CL</span>]) {
         <span class='kw'>for</span> <span class='ident'>cl</span> <span class='kw'>in</span> <span class='ident'>cls</span>.<span class='ident'>iter</span>() {
             <span class='kw'>for</span> <span class='ident'>commit</span> <span class='kw'>in</span> <span class='ident'>cl</span>.<span class='ident'>commits</span>().<span class='ident'>iter</span>() {
                 <span class='kw'>if</span> <span class='self'>self</span>.<span class='ident'>approve</span>(<span class='ident'>commit</span>) {

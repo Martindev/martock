@@ -1,5 +1,5 @@
 (function() {var implementors = {};
-implementors["martock"] = ["impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='enum' href='martock/block/enum.Block.html' title='martock::block::Block'>Block</a>",];
+implementors["martock"] = [];
 
             if (window.register_implementors) {
                 window.register_implementors(implementors);
