@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["Camera",""],["Position",""]]});
+initSidebarItems({"struct":[["Camera","Camera represents a viewing window with a position which is the top left of the viewing window, and dimensions in blocks."],["View",""]]});

@@ -47,26 +47,22 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-29' class='srclink' href='../../src/martock/src/camera.rs.html#1-56' title='goto source code'>[src]</a></span></h1>
-<div class='docblock'><p>Camera is responsible for keeping track of the current viewing window. This does not
-necessarily mean that it is coupled to the player; the camera should be able to move
-independently of the player.</p>
-
-<p>There should be one static camera instance (i.e., multiple cameras should not be created).</p>
-
-<p>The camera has a relative position in the world. This is a two-dimensional floating point value</p>
+               </span><a id='src-29' class='srclink' href='../../src/martock/src/camera.rs.html#1-87' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>Camera is responsible for keeping track of the current viewing window. It is not coupled to the
+player and may move independently.</p>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                        <tr class=' module-item'>
                            <td><a class='struct' href='struct.Camera.html'
                                   title='martock::camera::Camera'>Camera</a></td>
                            <td class='docblock-short'>
-                                
+                                <p>Camera represents a viewing window with a position which is the top left of the viewing window,
+and dimensions in blocks.</p>
                            </td>
                        </tr>
                        <tr class=' module-item'>
-                           <td><a class='struct' href='struct.Position.html'
-                                  title='martock::camera::Position'>Position</a></td>
+                           <td><a class='struct' href='struct.View.html'
+                                  title='martock::camera::View'>View</a></td>
                            <td class='docblock-short'>
                                 
                            </td>

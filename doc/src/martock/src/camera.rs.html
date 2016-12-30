@@ -98,45 +98,107 @@
 <span id="54">54</span>
 <span id="55">55</span>
 <span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
 </pre><pre class='rust '>
-<span class='doccomment'>//! Camera is responsible for keeping track of the current viewing window. This does not</span>
-<span class='doccomment'>//! necessarily mean that it is coupled to the player; the camera should be able to move</span>
-<span class='doccomment'>//! independently of the player.</span>
-<span class='doccomment'>//!</span>
-<span class='doccomment'>//! There should be one static camera instance (i.e., multiple cameras should not be created).</span>
-<span class='doccomment'>//!</span>
-<span class='doccomment'>//! The camera has a relative position in the world. This is a two-dimensional floating point value</span>
+<span class='doccomment'>//! Camera is responsible for keeping track of the current viewing window. It is not coupled to the</span>
+<span class='doccomment'>//! player and may move independently.</span>
 
 <span class='kw'>use</span> <span class='ident'>piston</span>::<span class='ident'>input</span>::<span class='ident'>Button</span>;
 <span class='kw'>use</span> <span class='ident'>piston</span>::<span class='ident'>input</span>::<span class='ident'>Key</span>;
 <span class='kw'>use</span> <span class='ident'>piston</span>::<span class='ident'>input</span>::<span class='ident'>Input</span>;
 
 <span class='kw'>use</span> <span class='ident'>interactive</span>;
+<span class='kw'>use</span> <span class='ident'>world</span>;
 
 <span class='comment'>// The amount of pixels by which the camera is nudged by input keys.</span>
 <span class='comment'>// TODO(jacob-zimmerman): Implement natural camera motion in response to input.</span>
 <span class='kw'>const</span> <span class='ident'>NUDGE</span>: <span class='ident'>f64</span> <span class='op'>=</span> <span class='number'>0.1</span>;
 
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>, <span class='ident'>Clone</span>)]</span>
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Position</span> {
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>View</span> {
     <span class='kw'>pub</span> <span class='ident'>x</span>: <span class='ident'>f64</span>,
     <span class='kw'>pub</span> <span class='ident'>y</span>: <span class='ident'>f64</span>,
+    <span class='kw'>pub</span> <span class='ident'>width</span>: <span class='ident'>usize</span>,
+    <span class='kw'>pub</span> <span class='ident'>height</span>: <span class='ident'>usize</span>,
+}
+
+<span class='kw'>impl</span> <span class='ident'>View</span> {
+    <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>x</span>: <span class='ident'>f64</span>, <span class='ident'>y</span>: <span class='ident'>f64</span>, <span class='ident'>width</span>: <span class='ident'>usize</span>, <span class='ident'>height</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+        <span class='ident'>View</span> {
+            <span class='ident'>x</span>: <span class='ident'>x</span>,
+            <span class='ident'>y</span>: <span class='ident'>y</span>,
+            <span class='ident'>width</span>: <span class='ident'>width</span>,
+            <span class='ident'>height</span>: <span class='ident'>height</span>,
+        }
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>move_up</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
+        <span class='kw'>if</span> <span class='self'>self</span>.<span class='ident'>y</span> <span class='op'>-</span> <span class='ident'>NUDGE</span> <span class='op'>&gt;=</span> <span class='number'>0.0</span> {
+            <span class='self'>self</span>.<span class='ident'>y</span> <span class='op'>-=</span> <span class='ident'>NUDGE</span>
+        }
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>move_down</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
+        <span class='kw'>if</span> <span class='self'>self</span>.<span class='ident'>y</span> <span class='op'>+</span> <span class='ident'>NUDGE</span> <span class='op'>+</span> <span class='self'>self</span>.<span class='ident'>height</span> <span class='kw'>as</span> <span class='ident'>f64</span> <span class='op'>&lt;=</span> <span class='ident'>world</span>::<span class='ident'>WORLD_HEIGHT</span> <span class='kw'>as</span> <span class='ident'>f64</span> {
+            <span class='self'>self</span>.<span class='ident'>y</span> <span class='op'>+=</span> <span class='ident'>NUDGE</span>
+        }
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>move_right</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
+        <span class='self'>self</span>.<span class='ident'>x</span> <span class='op'>+=</span> <span class='ident'>NUDGE</span>
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>move_left</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
+        <span class='self'>self</span>.<span class='ident'>x</span> <span class='op'>-=</span> <span class='ident'>NUDGE</span>
+    }
 }
 
 <span class='comment'>// TODO(jacob-zimmerman): Ensure the camera cannot enter illegal (negative height) positions. This</span>
 <span class='comment'>// may require giving it knowledge of the screen size in blocks.</span>
+<span class='doccomment'>/// Camera represents a viewing window with a position which is the top left of the viewing window,</span>
+<span class='doccomment'>/// and dimensions in blocks.</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Camera</span> {
-    <span class='ident'>position</span>: <span class='ident'>Position</span>,
+    <span class='ident'>view</span>: <span class='ident'>View</span>,
 }
 
 <span class='kw'>impl</span> <span class='ident'>Camera</span> {
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>initial_position</span>: <span class='ident'>Position</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
-        <span class='ident'>Camera</span> { <span class='ident'>position</span>: <span class='ident'>initial_position</span> }
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>x</span>: <span class='ident'>f64</span>, <span class='ident'>y</span>: <span class='ident'>f64</span>, <span class='ident'>width</span>: <span class='ident'>usize</span>, <span class='ident'>height</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+        <span class='ident'>Camera</span> { <span class='ident'>view</span>: <span class='ident'>View</span>::<span class='ident'>new</span>(<span class='ident'>x</span>, <span class='ident'>y</span>, <span class='ident'>width</span>, <span class='ident'>height</span>) }
     }
 
-    <span class='doccomment'>/// position returns the top left of the focal area.</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>position</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Position</span> {
-        <span class='self'>self</span>.<span class='ident'>position</span>
+    <span class='doccomment'>/// view returns the focal area.</span>
+    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>view</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>View</span> {
+        <span class='self'>self</span>.<span class='ident'>view</span>
     }
 }
 
@@ -145,10 +207,10 @@
         <span class='kw'>if</span> <span class='kw'>let</span> <span class='ident'>Input</span>::<span class='ident'>Press</span>(<span class='ident'>b</span>) <span class='op'>=</span> <span class='op'>*</span><span class='ident'>i</span> {
             <span class='kw'>if</span> <span class='kw'>let</span> <span class='ident'>Button</span>::<span class='ident'>Keyboard</span>(<span class='ident'>k</span>) <span class='op'>=</span> <span class='ident'>b</span> {
                 <span class='kw'>match</span> <span class='ident'>k</span> {
-                    <span class='ident'>Key</span>::<span class='ident'>Left</span> <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>position</span>.<span class='ident'>x</span> <span class='op'>-=</span> <span class='ident'>NUDGE</span>,
-                    <span class='ident'>Key</span>::<span class='ident'>Right</span> <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>position</span>.<span class='ident'>x</span> <span class='op'>+=</span> <span class='ident'>NUDGE</span>,
-                    <span class='ident'>Key</span>::<span class='ident'>Up</span> <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>position</span>.<span class='ident'>y</span> <span class='op'>-=</span> <span class='ident'>NUDGE</span>,
-                    <span class='ident'>Key</span>::<span class='ident'>Down</span> <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>position</span>.<span class='ident'>y</span> <span class='op'>+=</span> <span class='ident'>NUDGE</span>,
+                    <span class='ident'>Key</span>::<span class='ident'>Left</span> <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>view</span>.<span class='ident'>move_left</span>(),
+                    <span class='ident'>Key</span>::<span class='ident'>Right</span> <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>view</span>.<span class='ident'>move_right</span>(),
+                    <span class='ident'>Key</span>::<span class='ident'>Up</span> <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>view</span>.<span class='ident'>move_up</span>(),
+                    <span class='ident'>Key</span>::<span class='ident'>Down</span> <span class='op'>=&gt;</span> <span class='self'>self</span>.<span class='ident'>view</span>.<span class='ident'>move_down</span>(),
                     _ <span class='op'>=&gt;</span> (),
                 }
             }
