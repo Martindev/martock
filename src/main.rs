@@ -60,10 +60,13 @@ fn window() -> Result<sdl2_window::Sdl2Window, String> {
 }
 
 // commits solicits commits from all committers based on the state of the world.
-fn commits(world: &world::World, committers: &[&committer::Committer]) -> Vec<Box<committer::CL>> {
+fn commits(world: &world::World,
+           camera: &camera::Camera,
+           committers: &[&committer::Committer])
+           -> Vec<Box<committer::CL>> {
     let mut cls = Vec::new();
     for c in committers {
-        if let Some(cl) = c.cl(&world) {
+        if let Some(cl) = c.cl(&world, &camera) {
             cls.push(cl);
         }
     }
@@ -95,7 +98,7 @@ fn engine(mut window: sdl2_window::Sdl2Window, mut state: State) {
     while let Some(e) = events.next(&mut window) {
         match e {
             piston::input::Event::Update(_) => {
-                let change_list = commits(&state.world, &Vec::new());
+                let change_list = commits(&state.world, &camera, &Vec::new());
                 merge(&moderators, change_list, &Vec::new(), &mut state.world);
 
                 let mut lives: Vec<&mut life::Life> = Vec::new();
