@@ -4,23 +4,18 @@
 //!
 //! ProceduralGenerator is responsible for generating chunks of blocks as needed.
 //!
-//! ProceduralGenerator creates blocks 
+//! ProceduralGenerator creates blocks in complete vertical slices; we expand horizontally.
 
 use block;
 use committer;
 use world;
 
-let chunk_width, world_height = 0;
-
-pub type Chunk = [ [Block; chunk_width]; world_height]
-
 pub struct ProceduralGenerator {
-	next_chunk: Chunk
 
 }
 
 impl ProceduralGenerator {
-	fn
+	fn 
 }
 
 impl committer:Committer for ProceduralGenerator {
