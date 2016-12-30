@@ -88,7 +88,7 @@
 <span class='kw'>use</span> <span class='ident'>world</span>;
 
 <span class='kw'>const</span> <span class='ident'>HEIGHT</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='ident'>world</span>::<span class='ident'>HEIGHT</span>;
-<span class='kw'>const</span> <span class='ident'>WIDTH</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='ident'>std</span>::<span class='ident'>u8</span>::<span class='ident'>MAX</span> <span class='kw'>as</span> <span class='ident'>usize</span>;
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>WIDTH</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='ident'>std</span>::<span class='ident'>u8</span>::<span class='ident'>MAX</span> <span class='kw'>as</span> <span class='ident'>usize</span>;
 
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Chunk</span> {
     <span class='kw'>pub</span> <span class='ident'>blocks</span>: [[<span class='ident'>block</span>::<span class='ident'>Block</span>; <span class='ident'>HEIGHT</span>]; <span class='ident'>WIDTH</span>],
