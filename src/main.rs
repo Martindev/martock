@@ -77,7 +77,7 @@ fn engine(mut window: sdl2_window::Sdl2Window,
     let opengl = opengl_graphics::OpenGL::V4_5;
     let mut gl = opengl_graphics::GlGraphics::new(opengl);
     let mut events = piston::event_loop::WindowEvents::new();
-    let camera = camera::Camera::new(camera::Position { x: 0.0, y: 0.0 });
+    let mut camera = camera::Camera::new(camera::Position { x: 0.0, y: 0.0 });
     while let Some(e) = events.next(&mut window) {
         match e {
             piston::input::Event::Update(_) => {
@@ -96,7 +96,7 @@ fn engine(mut window: sdl2_window::Sdl2Window,
             piston::input::Event::AfterRender(_) => (),
             piston::input::Event::Idle(_) => (),
             piston::input::Event::Input(input) => {
-                let mut interactives: Vec<&mut interactive::Interactive> = Vec::new();
+                let mut interactives: Vec<&mut interactive::Interactive> = vec![&mut camera];
                 for mut interactive in interactives.iter_mut() {
                     interactive.interact(&input);
                 }
