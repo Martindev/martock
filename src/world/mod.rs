@@ -53,6 +53,8 @@ impl World {
         self.grid.get_mut(&c.chunk).unwrap().blocks[c.x][c.y] = next_state;
     }
 
+    /// iter returns an iterator over blocks starting at (x,y) moving to the right and down using a
+    /// window defined by width and height.
     pub fn iter(&self, x: i64, y: u8, width: usize, height: usize) -> iter::BlockIter {
         iter::BlockIter::new(x, y, width, height, &self)
     }
