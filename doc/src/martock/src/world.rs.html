@@ -122,6 +122,8 @@
 <span id="78">78</span>
 <span id="79">79</span>
 <span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! world manages the object world state.</span>
 
@@ -130,15 +132,17 @@
 
 <span class='kw'>use</span> <span class='ident'>block</span>;
 
-<span class='kw'>const</span> <span class='ident'>CHUNK_HEIGHT</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='ident'>std</span>::<span class='ident'>u8</span>::<span class='ident'>MAX</span> <span class='kw'>as</span> <span class='ident'>usize</span>;
+<span class='doccomment'>/// The world is WORLD_HEIGHT blocks tall.</span>
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>WORLD_HEIGHT</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='ident'>std</span>::<span class='ident'>u8</span>::<span class='ident'>MAX</span> <span class='kw'>as</span> <span class='ident'>usize</span>;
+
 <span class='kw'>const</span> <span class='ident'>CHUNK_WIDTH</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='ident'>std</span>::<span class='ident'>u8</span>::<span class='ident'>MAX</span> <span class='kw'>as</span> <span class='ident'>usize</span>;
 <span class='kw'>struct</span> <span class='ident'>Chunk</span> {
-    <span class='ident'>blocks</span>: [[<span class='ident'>block</span>::<span class='ident'>Block</span>; <span class='ident'>CHUNK_HEIGHT</span>]; <span class='ident'>CHUNK_WIDTH</span>],
+    <span class='ident'>blocks</span>: [[<span class='ident'>block</span>::<span class='ident'>Block</span>; <span class='ident'>WORLD_HEIGHT</span>]; <span class='ident'>CHUNK_WIDTH</span>],
 }
 
 <span class='kw'>impl</span> <span class='ident'>Chunk</span> {
     <span class='kw'>fn</span> <span class='ident'>new</span>() <span class='op'>-&gt;</span> <span class='self'>Self</span> {
-        <span class='ident'>Chunk</span> { <span class='ident'>blocks</span>: [[<span class='ident'>block</span>::<span class='ident'>Block</span>::<span class='ident'>Void</span>; <span class='ident'>CHUNK_HEIGHT</span>]; <span class='ident'>CHUNK_WIDTH</span>] }
+        <span class='ident'>Chunk</span> { <span class='ident'>blocks</span>: [[<span class='ident'>block</span>::<span class='ident'>Block</span>::<span class='ident'>Void</span>; <span class='ident'>WORLD_HEIGHT</span>]; <span class='ident'>CHUNK_WIDTH</span>] }
     }
 }
 
