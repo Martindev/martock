@@ -6,7 +6,7 @@ use piston::input::Key;
 use piston::input::Input;
 
 use interactive;
-use world;
+use point::Point;
 
 // The amount of pixels by which the camera is nudged by input keys.
 // TODO(jacob-zimmerman): Implement natural camera motion in response to input.
@@ -15,8 +15,7 @@ const NUDGE: f64 = 0.1;
 /// View represents a focal area of the world.
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub struct View {
-    pub x: f64,
-    pub y: f64,
+    pub top_left: Point,
 
     /// width of window in blocks.
     pub width: usize,
@@ -36,37 +35,36 @@ pub struct View {
 
 impl View {
     fn new(x: f64, y: f64, width: usize, height: usize) -> Self {
+        let top_left = Point::from(x, y);
         let mut view = View {
-            x: x,
-            y: y,
+            top_left: top_left,
             width: width,
             height: height,
-            block_x: x as i64,
-            block_y: y as u8,
-            translate_x: (x % 1.0) * -1.0,
-            translate_y: (y % 1.0) * -1.0,
+            block_x: top_left.x() as i64,
+            block_y: top_left.y() as u8,
+            translate_x: (top_left.x() % 1.0) * -1.0,
+            translate_y: (top_left.y() % 1.0) * -1.0,
         };
-        if x < 0.0 {
+        if top_left.x() < 0.0 {
             view.block_x -= 1;
-            view.translate_x = (1.0 - (x % 1.0).abs()) * -1.0;
+            view.translate_x = (1.0 - (top_left.x() % 1.0).abs()) * -1.0;
         }
         view
     }
 
     fn renew(&mut self, xdiff: f64, ydiff: f64) {
-        *self = View::new(self.x + xdiff, self.y + ydiff, self.width, self.height)
+        *self = View::new(self.top_left.x() + xdiff,
+                          self.top_left.y() + ydiff,
+                          self.width,
+                          self.height)
     }
 
     fn move_up(&mut self) {
-        if self.y - NUDGE >= 0.0 {
-            self.renew(0.0, -NUDGE)
-        }
+        self.renew(0.0, -NUDGE)
     }
 
     fn move_down(&mut self) {
-        if self.y + NUDGE + self.height as f64 <= world::HEIGHT as f64 {
-            self.renew(0.0, NUDGE)
-        }
+        self.renew(0.0, NUDGE)
     }
 
     fn move_right(&mut self) {
@@ -78,8 +76,6 @@ impl View {
     }
 }
 
-// TODO(jacob-zimmerman): Ensure the camera cannot enter illegal (negative height) positions. This
-// may require giving it knowledge of the screen size in blocks.
 /// Camera represents a viewing window with a position which is the top left of the viewing window,
 /// and dimensions in blocks.
 pub struct Camera {

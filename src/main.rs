@@ -34,6 +34,8 @@ pub mod commit;
 pub mod committer;
 pub mod interactive;
 pub mod life;
+pub mod point;
+mod point_test;
 pub mod reality;
 pub mod tool;
 pub mod render;
