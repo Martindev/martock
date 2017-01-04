@@ -152,10 +152,6 @@
 <span id="108">108</span>
 <span id="109">109</span>
 <span id="110">110</span>
-<span id="111">111</span>
-<span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! Camera is responsible for keeping track of the current viewing window. It is not coupled to the</span>
 <span class='doccomment'>//! player and may move independently.</span>
@@ -165,7 +161,7 @@
 <span class='kw'>use</span> <span class='ident'>piston</span>::<span class='ident'>input</span>::<span class='ident'>Input</span>;
 
 <span class='kw'>use</span> <span class='ident'>interactive</span>;
-<span class='kw'>use</span> <span class='ident'>world</span>;
+<span class='kw'>use</span> <span class='ident'>point</span>::<span class='ident'>Point</span>;
 
 <span class='comment'>// The amount of pixels by which the camera is nudged by input keys.</span>
 <span class='comment'>// TODO(jacob-zimmerman): Implement natural camera motion in response to input.</span>
@@ -174,8 +170,7 @@
 <span class='doccomment'>/// View represents a focal area of the world.</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Copy</span>, <span class='ident'>Clone</span>, <span class='ident'>Debug</span>, <span class='ident'>PartialEq</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>View</span> {
-    <span class='kw'>pub</span> <span class='ident'>x</span>: <span class='ident'>f64</span>,
-    <span class='kw'>pub</span> <span class='ident'>y</span>: <span class='ident'>f64</span>,
+    <span class='kw'>pub</span> <span class='ident'>top_left</span>: <span class='ident'>Point</span>,
 
     <span class='doccomment'>/// width of window in blocks.</span>
     <span class='kw'>pub</span> <span class='ident'>width</span>: <span class='ident'>usize</span>,
@@ -195,37 +190,36 @@
 
 <span class='kw'>impl</span> <span class='ident'>View</span> {
     <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>x</span>: <span class='ident'>f64</span>, <span class='ident'>y</span>: <span class='ident'>f64</span>, <span class='ident'>width</span>: <span class='ident'>usize</span>, <span class='ident'>height</span>: <span class='ident'>usize</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+        <span class='kw'>let</span> <span class='ident'>top_left</span> <span class='op'>=</span> <span class='ident'>Point</span>::<span class='ident'>from</span>(<span class='ident'>x</span>, <span class='ident'>y</span>);
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>view</span> <span class='op'>=</span> <span class='ident'>View</span> {
-            <span class='ident'>x</span>: <span class='ident'>x</span>,
-            <span class='ident'>y</span>: <span class='ident'>y</span>,
+            <span class='ident'>top_left</span>: <span class='ident'>top_left</span>,
             <span class='ident'>width</span>: <span class='ident'>width</span>,
             <span class='ident'>height</span>: <span class='ident'>height</span>,
-            <span class='ident'>block_x</span>: <span class='ident'>x</span> <span class='kw'>as</span> <span class='ident'>i64</span>,
-            <span class='ident'>block_y</span>: <span class='ident'>y</span> <span class='kw'>as</span> <span class='ident'>u8</span>,
-            <span class='ident'>translate_x</span>: (<span class='ident'>x</span> <span class='op'>%</span> <span class='number'>1.0</span>) <span class='op'>*</span> <span class='op'>-</span><span class='number'>1.0</span>,
-            <span class='ident'>translate_y</span>: (<span class='ident'>y</span> <span class='op'>%</span> <span class='number'>1.0</span>) <span class='op'>*</span> <span class='op'>-</span><span class='number'>1.0</span>,
+            <span class='ident'>block_x</span>: <span class='ident'>top_left</span>.<span class='ident'>x</span>() <span class='kw'>as</span> <span class='ident'>i64</span>,
+            <span class='ident'>block_y</span>: <span class='ident'>top_left</span>.<span class='ident'>y</span>() <span class='kw'>as</span> <span class='ident'>u8</span>,
+            <span class='ident'>translate_x</span>: (<span class='ident'>top_left</span>.<span class='ident'>x</span>() <span class='op'>%</span> <span class='number'>1.0</span>) <span class='op'>*</span> <span class='op'>-</span><span class='number'>1.0</span>,
+            <span class='ident'>translate_y</span>: (<span class='ident'>top_left</span>.<span class='ident'>y</span>() <span class='op'>%</span> <span class='number'>1.0</span>) <span class='op'>*</span> <span class='op'>-</span><span class='number'>1.0</span>,
         };
-        <span class='kw'>if</span> <span class='ident'>x</span> <span class='op'>&lt;</span> <span class='number'>0.0</span> {
+        <span class='kw'>if</span> <span class='ident'>top_left</span>.<span class='ident'>x</span>() <span class='op'>&lt;</span> <span class='number'>0.0</span> {
             <span class='ident'>view</span>.<span class='ident'>block_x</span> <span class='op'>-=</span> <span class='number'>1</span>;
-            <span class='ident'>view</span>.<span class='ident'>translate_x</span> <span class='op'>=</span> (<span class='number'>1.0</span> <span class='op'>-</span> (<span class='ident'>x</span> <span class='op'>%</span> <span class='number'>1.0</span>).<span class='ident'>abs</span>()) <span class='op'>*</span> <span class='op'>-</span><span class='number'>1.0</span>;
+            <span class='ident'>view</span>.<span class='ident'>translate_x</span> <span class='op'>=</span> (<span class='number'>1.0</span> <span class='op'>-</span> (<span class='ident'>top_left</span>.<span class='ident'>x</span>() <span class='op'>%</span> <span class='number'>1.0</span>).<span class='ident'>abs</span>()) <span class='op'>*</span> <span class='op'>-</span><span class='number'>1.0</span>;
         }
         <span class='ident'>view</span>
     }
 
     <span class='kw'>fn</span> <span class='ident'>renew</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>xdiff</span>: <span class='ident'>f64</span>, <span class='ident'>ydiff</span>: <span class='ident'>f64</span>) {
-        <span class='op'>*</span><span class='self'>self</span> <span class='op'>=</span> <span class='ident'>View</span>::<span class='ident'>new</span>(<span class='self'>self</span>.<span class='ident'>x</span> <span class='op'>+</span> <span class='ident'>xdiff</span>, <span class='self'>self</span>.<span class='ident'>y</span> <span class='op'>+</span> <span class='ident'>ydiff</span>, <span class='self'>self</span>.<span class='ident'>width</span>, <span class='self'>self</span>.<span class='ident'>height</span>)
+        <span class='op'>*</span><span class='self'>self</span> <span class='op'>=</span> <span class='ident'>View</span>::<span class='ident'>new</span>(<span class='self'>self</span>.<span class='ident'>top_left</span>.<span class='ident'>x</span>() <span class='op'>+</span> <span class='ident'>xdiff</span>,
+                          <span class='self'>self</span>.<span class='ident'>top_left</span>.<span class='ident'>y</span>() <span class='op'>+</span> <span class='ident'>ydiff</span>,
+                          <span class='self'>self</span>.<span class='ident'>width</span>,
+                          <span class='self'>self</span>.<span class='ident'>height</span>)
     }
 
     <span class='kw'>fn</span> <span class='ident'>move_up</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
-        <span class='kw'>if</span> <span class='self'>self</span>.<span class='ident'>y</span> <span class='op'>-</span> <span class='ident'>NUDGE</span> <span class='op'>&gt;=</span> <span class='number'>0.0</span> {
-            <span class='self'>self</span>.<span class='ident'>renew</span>(<span class='number'>0.0</span>, <span class='op'>-</span><span class='ident'>NUDGE</span>)
-        }
+        <span class='self'>self</span>.<span class='ident'>renew</span>(<span class='number'>0.0</span>, <span class='op'>-</span><span class='ident'>NUDGE</span>)
     }
 
     <span class='kw'>fn</span> <span class='ident'>move_down</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
-        <span class='kw'>if</span> <span class='self'>self</span>.<span class='ident'>y</span> <span class='op'>+</span> <span class='ident'>NUDGE</span> <span class='op'>+</span> <span class='self'>self</span>.<span class='ident'>height</span> <span class='kw'>as</span> <span class='ident'>f64</span> <span class='op'>&lt;=</span> <span class='ident'>world</span>::<span class='ident'>HEIGHT</span> <span class='kw'>as</span> <span class='ident'>f64</span> {
-            <span class='self'>self</span>.<span class='ident'>renew</span>(<span class='number'>0.0</span>, <span class='ident'>NUDGE</span>)
-        }
+        <span class='self'>self</span>.<span class='ident'>renew</span>(<span class='number'>0.0</span>, <span class='ident'>NUDGE</span>)
     }
 
     <span class='kw'>fn</span> <span class='ident'>move_right</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) {
@@ -237,8 +231,6 @@
     }
 }
 
-<span class='comment'>// TODO(jacob-zimmerman): Ensure the camera cannot enter illegal (negative height) positions. This</span>
-<span class='comment'>// may require giving it knowledge of the screen size in blocks.</span>
 <span class='doccomment'>/// Camera represents a viewing window with a position which is the top left of the viewing window,</span>
 <span class='doccomment'>/// and dimensions in blocks.</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Camera</span> {

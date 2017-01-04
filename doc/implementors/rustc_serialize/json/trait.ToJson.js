@@ -1,5 +1,5 @@
 (function() {var implementors = {};
-implementors["rustc_serialize"] = [];implementors["image"] = [];implementors["glutin_window"] = [];implementors["opengl_graphics"] = [];
+implementors["rustc_serialize"] = [];implementors["glutin_window"] = [];implementors["image"] = [];implementors["opengl_graphics"] = [];
 
             if (window.register_implementors) {
                 window.register_implementors(implementors);

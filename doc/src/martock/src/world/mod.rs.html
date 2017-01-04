@@ -107,6 +107,7 @@
 <span id="63">63</span>
 <span id="64">64</span>
 <span id="65">65</span>
+<span id="66">66</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! world manages the object world state.</span>
 
@@ -119,8 +120,9 @@
 
 <span class='kw'>use</span> <span class='ident'>block</span>;
 
-<span class='doccomment'>/// The world is WORLD_HEIGHT blocks tall.</span>
+<span class='doccomment'>/// The world is WORLD_HEIGHT blocks tall and starts counting at FLOOR.</span>
 <span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>HEIGHT</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='ident'>std</span>::<span class='ident'>u8</span>::<span class='ident'>MAX</span> <span class='kw'>as</span> <span class='ident'>usize</span>;
+<span class='kw'>pub</span> <span class='kw'>const</span> <span class='ident'>FLOOR</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='number'>0</span>;
 
 <span class='doccomment'>/// CHUNK_WIDTH is the width of allocated blocks of world. Use this as a hint if making many</span>
 <span class='doccomment'>/// modifications to the world to reduce allocations.</span>

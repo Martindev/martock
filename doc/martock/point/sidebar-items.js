@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Point","Point represents an absolute world location safely; it will never represent an invalid world location."]]});
