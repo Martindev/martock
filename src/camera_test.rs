@@ -17,10 +17,6 @@ fn view() {
                           top_left: Point::from(0.0, 0.0),
                           width: 10,
                           height: 12,
-                          block_x: 0,
-                          block_y: 0,
-                          translate_x: 0.0,
-                          translate_y: 0.0,
                       },
                   },
                   ViewTest {
@@ -29,10 +25,6 @@ fn view() {
                           top_left: Point::from(-0.4, 0.0),
                           width: 200,
                           height: 600,
-                          block_x: -1,
-                          block_y: 0,
-                          translate_x: -0.6,
-                          translate_y: 0.0,
                       },
                   }]
         .iter() {

@@ -21,35 +21,15 @@ pub struct View {
     pub width: usize,
     /// height of window in blocks.
     pub height: usize,
-
-    /// x-index of the top left block in the view.
-    pub block_x: i64,
-    /// y-index of the top left block in the view.
-    pub block_y: u8,
-
-    /// x-translation of view to represent in-block position (multiply by block size in pixels).
-    pub translate_x: f64,
-    /// y-translation of view to represent in-block position (multiply by block size in pixels).
-    pub translate_y: f64,
 }
 
 impl View {
     fn new(x: f64, y: f64, width: usize, height: usize) -> Self {
-        let top_left = Point::from(x, y);
-        let mut view = View {
-            top_left: top_left,
+        View {
+            top_left: Point::from(x, y),
             width: width,
             height: height,
-            block_x: top_left.x() as i64,
-            block_y: top_left.y() as u8,
-            translate_x: (top_left.x() % 1.0) * -1.0,
-            translate_y: (top_left.y() % 1.0) * -1.0,
-        };
-        if top_left.x() < 0.0 {
-            view.block_x -= 1;
-            view.translate_x = (1.0 - (top_left.x() % 1.0).abs()) * -1.0;
         }
-        view
     }
 
     fn renew(&mut self, xdiff: f64, ydiff: f64) {

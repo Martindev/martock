@@ -20,10 +20,11 @@
 //! 4. Update all the mutable world observers (who implement the life trait), such as the
 //!    camera, sound effects, etc.
 
-extern crate piston;
 extern crate glutin_window;
 extern crate graphics;
+extern crate nalgebra;
 extern crate opengl_graphics;
+extern crate piston;
 
 pub mod arbiter;
 pub mod block;

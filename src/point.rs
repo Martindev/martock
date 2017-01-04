@@ -25,6 +25,27 @@ impl Point {
     pub fn y(&self) -> f64 {
         self.y.val()
     }
+
+    /// block returns the coordinates of the block in which the point resides.
+    pub fn block_pos(&self) -> (i64, u8) {
+        let x = if (self.x() as i64) < 0 {
+            (self.x() - 1.0) as i64
+        } else {
+            self.x() as i64
+        };
+        (x, self.y() as u8)
+    }
+
+    /// block offsets returns the percentage of the block in which it resides that it is offset
+    /// from the top left of the block.
+    pub fn block_offsets(&self) -> (f64, f64) {
+        let x = if self.x() < 0.0 {
+            1.0 - (self.x().abs() % 1.0)
+        } else {
+            self.x() % 1.0
+        };
+        (x, self.y() % 1.0)
+    }
 }
 
 #[derive(PartialEq, Debug, Copy, Clone)]
