@@ -1,5 +1,5 @@
 (function() {var implementors = {};
-implementors["sdl2_window"] = [];
+implementors["glutin_window"] = [];
 
             if (window.register_implementors) {
                 window.register_implementors(implementors);

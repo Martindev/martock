@@ -198,7 +198,7 @@
 <span class='doccomment'>//!    camera, sound effects, etc.</span>
 
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>piston</span>;
-<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>sdl2_window</span>;
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>glutin_window</span>;
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>graphics</span>;
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>opengl_graphics</span>;
 
@@ -232,7 +232,7 @@
 <span class='kw'>const</span> <span class='ident'>VIEW_WIDTH</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='ident'>SCREEN_WIDTH</span> <span class='op'>/</span> <span class='ident'>BLOCK_PIXELS</span> <span class='op'>+</span> <span class='number'>1</span>;
 <span class='kw'>const</span> <span class='ident'>VIEW_HEIGHT</span>: <span class='ident'>usize</span> <span class='op'>=</span> <span class='ident'>SCREEN_HEIGHT</span> <span class='op'>/</span> <span class='ident'>BLOCK_PIXELS</span> <span class='op'>+</span> <span class='number'>2</span>;
 
-<span class='kw'>fn</span> <span class='ident'>window</span>() <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>sdl2_window</span>::<span class='ident'>Sdl2Window</span>, <span class='ident'>String</span><span class='op'>&gt;</span> {
+<span class='kw'>fn</span> <span class='ident'>window</span>() <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>glutin_window</span>::<span class='ident'>GlutinWindow</span>, <span class='ident'>String</span><span class='op'>&gt;</span> {
     <span class='ident'>piston</span>::<span class='ident'>window</span>::<span class='ident'>WindowSettings</span>::<span class='ident'>new</span>(<span class='string'>&quot;martock&quot;</span>, (<span class='ident'>SCREEN_WIDTH</span> <span class='kw'>as</span> <span class='ident'>u32</span>, <span class='ident'>SCREEN_HEIGHT</span> <span class='kw'>as</span> <span class='ident'>u32</span>))
         .<span class='ident'>build</span>()
 }
@@ -263,7 +263,7 @@
 
 <span class='comment'>// engine runs the main loop. Engine should not load any resources; those should be passed in.</span>
 <span class='comment'>// There should be no failure paths in engine.</span>
-<span class='kw'>fn</span> <span class='ident'>engine</span>(<span class='kw-2'>mut</span> <span class='ident'>window</span>: <span class='ident'>sdl2_window</span>::<span class='ident'>Sdl2Window</span>, <span class='kw-2'>mut</span> <span class='ident'>state</span>: <span class='ident'>State</span>) {
+<span class='kw'>fn</span> <span class='ident'>engine</span>(<span class='kw-2'>mut</span> <span class='ident'>window</span>: <span class='ident'>glutin_window</span>::<span class='ident'>GlutinWindow</span>, <span class='kw-2'>mut</span> <span class='ident'>state</span>: <span class='ident'>State</span>) {
     <span class='kw'>let</span> <span class='ident'>moderators</span> <span class='op'>=</span> <span class='ident'>Moderators</span> {
         <span class='ident'>arbiter</span>: <span class='ident'>arbiter</span>::<span class='ident'>Arbiter</span>::<span class='ident'>new</span>(),
         <span class='ident'>reality</span>: <span class='ident'>reality</span>::<span class='ident'>Reality</span>::<span class='ident'>new</span>(),

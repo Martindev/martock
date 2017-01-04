@@ -1,5 +1,5 @@
 (function() {var implementors = {};
-implementors["float"] = [];implementors["sdl2_window"] = [];implementors["graphics"] = [];implementors["opengl_graphics"] = [];
+implementors["float"] = [];implementors["graphics"] = [];implementors["glutin_window"] = [];implementors["opengl_graphics"] = [];
 
             if (window.register_implementors) {
                 window.register_implementors(implementors);
