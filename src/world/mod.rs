@@ -39,7 +39,10 @@ impl World {
     /// Return a block corresponding to the given (x,y) coordinates.
     pub fn block(&self, x: i64, y: u8) -> block::Block {
         let c = chunk::Coords::from(x, y);
-        self.grid[&c.chunk].blocks[c.x][c.y]
+        match self.grid.get(&c.chunk) {
+            Some(ch) => ch.blocks[c.x][c.y],
+            None => block::Block::Void,
+        }
     }
 
     pub fn generate_for(&mut self, x: i64, y: u8) -> block::Block {
