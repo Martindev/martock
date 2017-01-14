@@ -25,8 +25,8 @@ impl<'a> BlockIter<'a> {
 }
 
 impl<'a> Iterator for BlockIter<'a> {
-    type Item = (i64, u8, Option<block::Block>);
-
+    type Item = (i64, u8, block::Block);
+    
     /// next provides a tuple of (x, y, Option<Block>) until the window is spent.
     fn next(&mut self) -> Option<Self::Item> {
         if self.x < self.end_x && self.y < self.end_y {

@@ -4,6 +4,7 @@
 pub enum Block {
     Void,
     Ether,
+    Ground,
 }
 
 impl Default for Block {
