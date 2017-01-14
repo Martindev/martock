@@ -20,10 +20,11 @@
 //! 4. Update all the mutable world observers (who implement the life trait), such as the
 //!    camera, sound effects, etc.
 
-extern crate piston;
-extern crate sdl2_window;
+extern crate glutin_window;
 extern crate graphics;
+extern crate nalgebra;
 extern crate opengl_graphics;
+extern crate piston;
 
 pub mod arbiter;
 pub mod block;
@@ -34,6 +35,8 @@ pub mod commit;
 pub mod committer;
 pub mod interactive;
 pub mod life;
+pub mod point;
+mod point_test;
 pub mod reality;
 pub mod tool;
 pub mod render;
@@ -55,7 +58,7 @@ const BLOCK_PIXELS: usize = 128;
 const VIEW_WIDTH: usize = SCREEN_WIDTH / BLOCK_PIXELS + 1;
 const VIEW_HEIGHT: usize = SCREEN_HEIGHT / BLOCK_PIXELS + 2;
 
-fn window() -> Result<sdl2_window::Sdl2Window, String> {
+fn window() -> Result<glutin_window::GlutinWindow, String> {
     piston::window::WindowSettings::new("martock", (SCREEN_WIDTH as u32, SCREEN_HEIGHT as u32))
         .build()
 }
@@ -86,7 +89,7 @@ fn merge(moderators: &Moderators,
 
 // engine runs the main loop. Engine should not load any resources; those should be passed in.
 // There should be no failure paths in engine.
-fn engine(mut window: sdl2_window::Sdl2Window, mut state: State) {
+fn engine(mut window: glutin_window::GlutinWindow, mut state: State) {
     let moderators = Moderators {
         arbiter: arbiter::Arbiter::new(),
         reality: reality::Reality::new(),

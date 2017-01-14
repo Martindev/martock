@@ -9,8 +9,9 @@ use std::collections::HashMap;
 
 use block;
 
-/// The world is WORLD_HEIGHT blocks tall.
+/// The world is WORLD_HEIGHT blocks tall and starts counting at FLOOR.
 pub const HEIGHT: usize = std::u8::MAX as usize;
+pub const FLOOR: usize = 0;
 
 /// CHUNK_WIDTH is the width of allocated blocks of world. Use this as a hint if making many
 /// modifications to the world to reduce allocations.
