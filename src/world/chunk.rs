@@ -36,4 +36,8 @@ impl Coords {
             y: y as usize,
         }
     }
+
+    pub fn to_xy(c: i64, x: usize, y: usize) -> (i64, u8) {
+        (x as i64 + (c * WIDTH as i64), y as u8)
+    }
 }

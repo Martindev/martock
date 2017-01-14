@@ -25,6 +25,7 @@ extern crate graphics;
 extern crate nalgebra;
 extern crate opengl_graphics;
 extern crate piston;
+extern crate rand;
 
 pub mod arbiter;
 pub mod block;

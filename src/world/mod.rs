@@ -3,6 +3,7 @@
 mod chunk;
 mod iter;
 mod iter_test;
+mod procedural_generator;
 
 use std;
 use std::collections::HashMap;
@@ -25,31 +26,43 @@ pub const CHUNK_WIDTH: usize = chunk::WIDTH;
 ///
 /// From the user's perspective there is no concept of world boundaries; initialization is a
 /// per-block property and blocks are not allocated contiguously.
-pub struct World {
-    grid: HashMap<i64, chunk::Chunk>,
-}
+pub struct World { grid: HashMap<i64, chunk::Chunk> }
 
 impl World {
     /// new creates a new world.
     pub fn new() -> Self {
-        World { grid: HashMap::new() }
-    }
-
-    /// Returns a block if it is initialized. If the block is Block::Void, it will return None.
-    pub fn block(&self, x: i64, y: u8) -> Option<block::Block> {
-        let c = chunk::Coords::from(x, y);
-        if self.grid.contains_key(&c.chunk) {
-            match self.grid[&c.chunk].blocks[c.x][c.y] {
-                block::Block::Void => None,
-                v => Some(v),
-            }
-        } else {
-            None
+        World { 
+            grid: HashMap::new(),
         }
     }
 
+    /// Return a block corresponding to the given (x,y) coordinates.
+    pub fn block(&self, x: i64, y: u8) -> block::Block {
+        let c = chunk::Coords::from(x, y);
+        match self.grid.get(&c.chunk) {
+            Some(ch) => ch.blocks[c.x][c.y],
+            None => block::Block::Void,
+        }
+    }
+
+    pub fn generate_for(&mut self, x: i64, y: u8) -> block::Block {
+        if !self.grid.contains_key(&chunk::Coords::from(x, y).chunk) {
+            self.chunk(x, y);
+            procedural_generator::ProceduralGenerator::generate_chunk(x, y, self);
+        }
+       self.block(x, y)
+    }
+
+    /// Return a chunk corresponding to the given (x,y) coordinates. If the chunk has not yet been
+    /// initialized, then it is generated and added to the world in order to return a valid chunk.
+    pub fn chunk(&self, x: i64, y: u8) -> Option<&chunk::Chunk> {
+        let c = chunk::Coords::from(x, y);
+        self.grid.get(&c.chunk)
+    }
+
+
     /// Sets a block state to the passed next_state. To deinitialize a Block, set the block state
-    /// to Block::Void.
+    /// to Block::Void. Cartesian coordinates are absolute.
     pub fn set_block(&mut self, x: i64, y: u8, next_state: block::Block) {
         let c = chunk::Coords::from(x, y);
         if !self.grid.contains_key(&c.chunk) {
